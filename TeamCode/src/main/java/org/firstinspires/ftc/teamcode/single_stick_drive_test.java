@@ -71,8 +71,8 @@ public class single_stick_drive_test extends OpMode {
         thetaAdjusted=theta-45;
         telemetry.update();
         telemetry.addData("5: adjusted theta",thetaAdjusted);
-        xAdjustedForAngle=r*(Math.cos(thetaAdjusted));
-        yAdjustedForAngle=r*(Math.sin(thetaAdjusted));
+        xAdjustedForAngle=r*(Math.cos(Math.toRadians(thetaAdjusted)));
+        yAdjustedForAngle=r*(Math.sin(Math.toRadians(thetaAdjusted)));
         telemetry.update();
         telemetry.addData("6: motor 1 input pre-adjustment for speed", xAdjustedForAngle);
         telemetry.addData("7: motor 2 input pre-adjustment for speed", yAdjustedForAngle);
