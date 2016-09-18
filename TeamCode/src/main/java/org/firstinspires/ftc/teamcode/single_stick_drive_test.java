@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by Lego5 on 9/11/2016.
@@ -23,7 +24,7 @@ public class single_stick_drive_test extends OpMode {
            v_motor_left_drive=null;
         }
         try {
-            v_motor_right_drive=hardwareMap.dcMotor.get("left_drive");
+            v_motor_right_drive=hardwareMap.dcMotor.get("right_drive");
         }
         catch (Exception p_exception)
         {
@@ -45,7 +46,6 @@ public class single_stick_drive_test extends OpMode {
         else if (x<=0&&y>=0){quadrant=2;}
         else if (x<=0&&y<=0){quadrant=3;}
         else {quadrant=4;}
-        telemetry.update();
         telemetry.addData("3: quadrant", quadrant);
         //find theta
         if (x==0&&y>=0){theta=90;}
@@ -63,17 +63,14 @@ public class single_stick_drive_test extends OpMode {
         else if (quadrant==4){
             theta=Math.toDegrees(Math.atan(y/x))+360;
         }
-        telemetry.update();
         telemetry.addData("4: theta",theta);
         //find r
         r=Math.sqrt((x*x)+(y*y));
         //find adjusted theta and x and y coordinates
         thetaAdjusted=theta-45;
-        telemetry.update();
         telemetry.addData("5: adjusted theta",thetaAdjusted);
         xAdjustedForAngle=r*(Math.cos(Math.toRadians(thetaAdjusted)));
         yAdjustedForAngle=r*(Math.sin(Math.toRadians(thetaAdjusted)));
-        telemetry.update();
         telemetry.addData("6: motor 1 input pre-adjustment for speed", xAdjustedForAngle);
         telemetry.addData("7: motor 2 input pre-adjustment for speed", yAdjustedForAngle);
         //x is an on/off button for scaling
@@ -82,7 +79,6 @@ public class single_stick_drive_test extends OpMode {
             AdjustSpeedTo1_1=!AdjustSpeedTo1_1;
         }
         else if (!gamepad1.x){xbuttonPress=false;}
-        telemetry.update();
         telemetry.addData("8: speed adjustment to max of (1,1)",AdjustSpeedTo1_1);
         if (AdjustSpeedTo1_1){
             if (xAdjustedForAngle==0 && yAdjustedForAngle==0){scale=0;}
@@ -95,7 +91,6 @@ public class single_stick_drive_test extends OpMode {
             xAdjustedForAngleAnd1_1=xAdjustedForAngle;
             yAdjustedForAngleAnd1_1=yAdjustedForAngle;
         }
-        telemetry.update();
         telemetry.addData("9: motor 1 input with speed adjustment", xAdjustedForAngleAnd1_1);
         telemetry.addData("10: motor 2 input with speed adjustment", yAdjustedForAngleAnd1_1);
         //a is an on/off button for making motor inputs equal if they are close
@@ -121,12 +116,17 @@ public class single_stick_drive_test extends OpMode {
             motor1Input=xAdjustedForAngleAnd1_1;
             motor2input=yAdjustedForAngleAnd1_1;
         }
-        telemetry.update();
+        motor1Input= Range.clip(motor1Input,-1,1);
+        motor2input=Range.clip(motor2input,-1,1);
         telemetry.addData("11: motor 1 final input", motor1Input);
         telemetry.addData("12: motor 2 final input", motor2input);
-        v_motor_left_drive.setPower(motor1Input);
-        v_motor_right_drive.setPower(motor2input);
-
+        if (v_motor_left_drive!=null&&v_motor_right_drive!=null) {
+            v_motor_left_drive.setPower(motor1Input);
+            v_motor_right_drive.setPower(-motor2input);
+        }
+        else{
+            telemetry.addData("13: Motors not declared", "");
+        }
     }
     private DcMotor v_motor_left_drive;
     private DcMotor v_motor_right_drive;
