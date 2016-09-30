@@ -199,6 +199,4 @@ public class Team_10363_TeleOp_Decs {
     public double adjspeed(double speedModifier, int deltaAngle){
         return speedModifier*Math.sin(Math.toRadians(deltaAngle));
     }
-
-
 }

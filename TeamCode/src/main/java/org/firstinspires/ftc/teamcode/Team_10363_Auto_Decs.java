@@ -104,5 +104,61 @@ public class Team_10363_Auto_Decs {
         }
         else {return -36000;}
     }
+    //Resets the left drive wheel encoder.
+    public void reset_left_drive_encoder ()
+
+    {
+        if (v_motor_left_drive != null)
+        {
+            v_motor_left_drive.setMode
+                    ( DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                    );
+        }
+
+    }
+    //Resets the right drive wheel encoder.
+    public void reset_right_drive_encoder ()
+
+    {
+        if (v_motor_right_drive != null)
+        {
+            v_motor_right_drive.setMode
+                    ( DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                    );
+        }
+
+    }
+    //Resets both encoders
+    public void reset_drive_encoders(){
+        reset_left_drive_encoder();
+        reset_right_drive_encoder();
+    }
+    //Gets the left drive motor's encoder pos
+    public int a_left_encoder_pos(){
+        if (v_motor_left_drive!=null){
+            return v_motor_left_drive.getCurrentPosition();
+        }
+        else {
+            return 0;
+        }
+    }
+    //Same as above, but for the right drive motor
+    public int a_right_encoder_pos(){
+        if (v_motor_right_drive!=null){
+            return v_motor_right_drive.getCurrentPosition();
+        }
+        else {
+            return 0;
+        }
+    }
+    //Have the drive encoders reached a certain value?
+    public boolean have_drive_encoders_reached(int left, int right, boolean forwards){
+        if (forwards){
+            return a_left_encoder_pos()>=left&&a_right_encoder_pos()>=right;
+        }
+        else {
+            return a_left_encoder_pos()<=left&&a_right_encoder_pos()<=right;
+        }
+    }
 
 }
