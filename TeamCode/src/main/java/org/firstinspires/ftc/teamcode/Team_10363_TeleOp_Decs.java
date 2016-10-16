@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -14,6 +15,8 @@ public class Team_10363_TeleOp_Decs {
     //motors
     private DcMotor v_motor_left_drive;
     private DcMotor v_motor_right_drive;
+    //CR Servos
+    private CRServo v_servo_sweep;
     //sensors
     private GyroSensor SensorGyro;
 
@@ -61,6 +64,14 @@ public class Team_10363_TeleOp_Decs {
                 }
                 catch (Exception p_exception){}
             }
+        }
+        try {
+            v_servo_sweep=ahwMap.crservo.get("sweep");
+            v_servo_sweep.setPower(0);
+        }
+        catch (Exception p_exception){
+            DbgLog.msg(p_exception.getLocalizedMessage());
+            v_servo_sweep=null;
         }
 
 
@@ -198,5 +209,11 @@ public class Team_10363_TeleOp_Decs {
     //calculates adjspeed, the speed correction factor in straightDrive.
     public double adjspeed(double speedModifier, int deltaAngle){
         return speedModifier*Math.sin(Math.toRadians(deltaAngle));
+    }
+    //modifies sweep servo's speed
+    public  void m_sweep_speed(double speed){
+        if (v_servo_sweep!=null){
+            v_servo_sweep.setPower(Range.clip(speed, -1, 1));
+        }
     }
 }

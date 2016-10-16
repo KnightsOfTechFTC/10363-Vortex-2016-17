@@ -17,18 +17,18 @@ public class single_stick_drive_test extends OpMode {
     public void init() {
         // init motors
         try {
-            v_motor_left_drive=hardwareMap.dcMotor.get("left_drive");
+            v_motor_right_drive=hardwareMap.dcMotor.get("left_drive");
         }
         catch (Exception p_exception)
         {
-           v_motor_left_drive=null;
+           v_motor_right_drive=null;
         }
         try {
-            v_motor_right_drive=hardwareMap.dcMotor.get("right_drive");
+            v_motor_left_drive=hardwareMap.dcMotor.get("right_drive");
         }
         catch (Exception p_exception)
         {
-            v_motor_right_drive=null;
+            v_motor_left_drive=null;
         }
 
     }
