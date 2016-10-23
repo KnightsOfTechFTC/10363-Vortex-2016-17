@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -19,15 +22,19 @@ public class Team_10363_Auto_Decs {
     //motors
     private DcMotor v_motor_left_drive;
     private DcMotor v_motor_right_drive;
+    //servos
+    private Servo v_servo_left_beacon;
+    private Servo v_servo_right_beacon;
     //sensors
     private GyroSensor SensorGyro;
+    private ColorSensor GroundColor;
 
     public void init(HardwareMap ahwMap) {
         /*Try to add the left drive motor, stop it if it's moving, set zero power behavior
         * to "brake", and turn encoders on. */
         try{
             v_motor_left_drive=ahwMap.dcMotor.get("left_drive");
-            v_motor_left_drive.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_left_drive.setDirection(DcMotor.Direction.REVERSE);
             v_motor_left_drive.setPower(0);
             v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -40,13 +47,33 @@ public class Team_10363_Auto_Decs {
         //Same as above for the right motor, but reversed
         try {
             v_motor_right_drive=ahwMap.dcMotor.get("right_drive");
-            v_motor_right_drive.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_right_drive.setDirection(DcMotor.Direction.FORWARD);
             v_motor_right_drive.setPower(0);
             v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch (Exception p_exception){
             v_motor_right_drive=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        //Try to add the beacon pushing servos. The right one is in reverse.
+        try{
+            v_servo_left_beacon=ahwMap.servo.get("left beacon");
+            v_servo_left_beacon.setDirection(Servo.Direction.FORWARD);
+            v_servo_left_beacon.setPosition(.3);
+
+        }
+        catch (Exception p_exception){
+            v_servo_left_beacon=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_servo_right_beacon=ahwMap.servo.get("right beacon");
+            v_servo_right_beacon.setDirection(Servo.Direction.REVERSE);
+            v_servo_right_beacon.setPosition(.3);
+        }
+        catch (Exception p_exception){
+            v_servo_right_beacon=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         //Try to add the gyro
@@ -66,6 +93,16 @@ public class Team_10363_Auto_Decs {
                 }
                 catch (Exception p_exception){}
             }
+        }
+        //Try to add the color sensors
+        try {
+            GroundColor = ahwMap.colorSensor.get("ground");
+            GroundColor.setI2cAddress(I2cAddr.create7bit(0x42));
+            GroundColor.enableLed(true);
+        }
+        catch (Exception p_exception){
+            DbgLog.msg(p_exception.getLocalizedMessage());
+            GroundColor=null;
         }
 
 
@@ -159,6 +196,24 @@ public class Team_10363_Auto_Decs {
         else {
             return a_left_encoder_pos()<=left&&a_right_encoder_pos()<=right;
         }
+    }
+    public void push_left_beacon(){
+        if (v_servo_left_beacon!=null){v_servo_left_beacon.setPosition(.6);}
+    }
+    public void reset_left_beacon_servo(){
+        if (v_servo_left_beacon!=null) {v_servo_left_beacon.setPosition(.3);}
+    }
+    public void push_right_beacon(){
+        if (v_servo_right_beacon!=null) {v_servo_right_beacon.setPosition(.6);}
+    }
+    public void reset_right_beacon_servo(){
+        if (v_servo_right_beacon!=null) {v_servo_right_beacon.setPosition(.3);}
+    }
+    public double a_ground_blue(){
+        return GroundColor.blue();
+    }
+    public double a_ground_alpha(){
+        return GroundColor.alpha();
     }
 
 }
