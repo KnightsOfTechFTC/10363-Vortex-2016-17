@@ -85,16 +85,6 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 6:
-                RobII.setDrivePower(-1,0);
-                if (RobII.a_gyro_heading()>=90){
-                    RobII.setDrivePower(0, 0);
-                    left_encoder = RobII.a_left_encoder_pos();
-                    right_encoder = RobII.a_right_encoder_pos();
-                    v_state++;
-
-                }
-                break;
-            case 7:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>8){
                     RobII.setDrivePower(0.5f,0.5f);}
