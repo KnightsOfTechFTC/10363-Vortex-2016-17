@@ -210,10 +210,14 @@ public class Team_10363_Auto_Decs {
         if (v_servo_right_beacon!=null) {v_servo_right_beacon.setPosition(.3);}
     }
     public double a_ground_blue(){
-        return GroundColor.blue();
+        if (GroundColor!=null) {
+            return GroundColor.blue();
+        }
+        else return 0;
     }
     public double a_ground_alpha(){
         return GroundColor.alpha();
+
     }
 
 }
