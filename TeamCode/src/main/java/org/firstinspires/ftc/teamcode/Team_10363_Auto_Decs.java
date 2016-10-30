@@ -28,6 +28,8 @@ public class Team_10363_Auto_Decs {
     //sensors
     private GyroSensor SensorGyro;
     private ColorSensor GroundColor;
+    private ColorSensor LeftColor;
+    private ColorSensor RightColor;
 
     public void init(HardwareMap ahwMap) {
         /*Try to add the left drive motor, stop it if it's moving, set zero power behavior
@@ -97,12 +99,30 @@ public class Team_10363_Auto_Decs {
         //Try to add the color sensors
         try {
             GroundColor = ahwMap.colorSensor.get("ground");
-            GroundColor.setI2cAddress(I2cAddr.create7bit(0x42));
+            GroundColor.setI2cAddress(I2cAddr.create7bit(0x3C));
             GroundColor.enableLed(true);
         }
         catch (Exception p_exception){
             DbgLog.msg(p_exception.getLocalizedMessage());
             GroundColor=null;
+        }
+        try{
+            LeftColor = ahwMap.colorSensor.get("left-color");
+            LeftColor.setI2cAddress(I2cAddr.create7bit(0x42));
+            LeftColor.enableLed(false);
+        }
+        catch (Exception p_exception){
+            DbgLog.msg(p_exception.getLocalizedMessage());
+            LeftColor=null;
+        }
+        try {
+            RightColor = ahwMap.colorSensor.get("left-color");
+            RightColor.setI2cAddress(I2cAddr.create7bit(0x44));
+            RightColor.enableLed(false);
+        }
+        catch (Exception p_exception){
+            DbgLog.msg(p_exception.getLocalizedMessage());
+            RightColor=null;
         }
 
 
@@ -200,6 +220,9 @@ public class Team_10363_Auto_Decs {
     public void push_left_beacon(){
         if (v_servo_left_beacon!=null){v_servo_left_beacon.setPosition(.6);}
     }
+    public void move_left_beacon_to_read(){
+        if (v_servo_left_beacon!=null){v_servo_left_beacon.setPosition(.45);}
+    }
     public void reset_left_beacon_servo(){
         if (v_servo_left_beacon!=null) {v_servo_left_beacon.setPosition(.3);}
     }
@@ -218,6 +241,20 @@ public class Team_10363_Auto_Decs {
     public double a_ground_alpha(){
         return GroundColor.alpha();
 
+    }
+    public double a_left_blue(){
+        double returnthis = 0;
+        if (LeftColor != null) {
+            returnthis = LeftColor.blue();
+        }
+        return returnthis;
+    }
+    public double a_left_red(){
+        double returnthis = 0;
+        if (LeftColor != null) {
+            returnthis = LeftColor.red();
+        }
+        return returnthis;
     }
 
 }
