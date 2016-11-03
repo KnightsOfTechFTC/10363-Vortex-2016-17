@@ -116,7 +116,7 @@ public class Team_10363_Auto_Decs {
             LeftColor=null;
         }
         try {
-            RightColor = ahwMap.colorSensor.get("left-color");
+            RightColor = ahwMap.colorSensor.get("right-color");
             RightColor.setI2cAddress(I2cAddr.create7bit(0x44));
             RightColor.enableLed(false);
         }

@@ -23,6 +23,11 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
         telemetry.addData("1: State",v_state);
         telemetry.addData("2: left encoder", RobII.a_left_encoder_pos());
         telemetry.addData("3: right encoder", RobII.a_right_encoder_pos());
+        telemetry.addData("4: Heading", RobII.a_gyro_heading());
+        telemetry.addData("5: Ground Color (Blue)", RobII.a_ground_blue());
+        telemetry.addData("6: Ground Color (Alpha)", RobII.a_ground_alpha());
+        telemetry.addData("7: Beacon Red", RobII.a_left_red());
+        telemetry.addData("8: Beacon Blue", RobII.a_left_blue());
         switch (v_state) {
             case 0:
                 RobII.setDrivePower((float) (.5 - RobII.adjspeed(1, RobII.a_gyro_heading())), (float) (.5 + RobII.adjspeed(1, RobII.a_gyro_heading())));
