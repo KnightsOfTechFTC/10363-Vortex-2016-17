@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -16,6 +17,11 @@ public class Team_10363_TeleOp_Decs {
     private DcMotor v_motor_left_drive;
     private DcMotor v_motor_right_drive;
     private DcMotor v_motor_intake;
+    private DcMotor v_motor_lift;
+
+    //servos
+    private Servo v_servo_left_beacon;
+    private Servo v_servo_right_beacon;
 
     //sensors
     private GyroSensor SensorGyro;
@@ -57,6 +63,37 @@ public class Team_10363_TeleOp_Decs {
         //If it doesn't work, set the motor to null and add record the problem in the Debug log.
         catch (Exception p_exception){
             v_motor_intake=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_servo_left_beacon=ahwMap.servo.get("left beacon");
+            v_servo_left_beacon.setDirection(Servo.Direction.FORWARD);
+            v_servo_left_beacon.setPosition(.3);
+
+        }
+        catch (Exception p_exception){
+            v_servo_left_beacon=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_servo_right_beacon=ahwMap.servo.get("right beacon");
+            v_servo_right_beacon.setDirection(Servo.Direction.REVERSE);
+            v_servo_right_beacon.setPosition(.3);
+        }
+        catch (Exception p_exception){
+            v_servo_right_beacon=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_motor_lift=ahwMap.dcMotor.get("lift");
+            v_motor_lift.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_lift.setPower(0);
+            v_motor_lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        //If it doesn't work, set the motor to null and add record the problem in the Debug log.
+        catch (Exception p_exception){
+            v_motor_lift=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         //Try to add the gyro
@@ -215,10 +252,27 @@ public class Team_10363_TeleOp_Decs {
     public double adjspeed(double speedModifier, int deltaAngle){
         return speedModifier*Math.sin(Math.toRadians(deltaAngle));
     }
+    public void m_lift_power(float power){
+        if (v_motor_lift!=null){
+            float sendpower= Range.clip(power,-1,1);
+            v_motor_lift.setPower(sendpower);
+        }
+
+    }
     public void m_intake_power(float power){
         if (v_motor_intake!=null){
             float sendpower=Range.clip(power,-1,1);
             v_motor_intake.setPower(sendpower);
+        }
+    }
+     void press_or_reset_beacons(boolean press){
+        if (press){
+            v_servo_left_beacon.setPosition(.6);
+            v_servo_right_beacon.setPosition(.6);
+        }
+         else {
+            v_servo_left_beacon.setPosition(.35);
+            v_servo_right_beacon.setPosition(.35);
         }
     }
 

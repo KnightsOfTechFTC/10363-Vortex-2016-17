@@ -32,7 +32,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
         switch (v_state) {
             case 0:
                 RobII.setDrivePower((float) (.5 - RobII.adjspeed(1, RobII.a_gyro_heading())), (float) (.5 + RobII.adjspeed(1, RobII.a_gyro_heading())));
-                if (RobII.have_drive_encoders_reached(left_encoder-4657, right_encoder-4657, false)){
+                if (RobII.have_drive_encoders_reached(left_encoder-4620, right_encoder-4620, false)){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -56,7 +56,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                     right_encoder = RobII.a_right_encoder_pos();
                     v_state++;
                 }
-                if (RobII.have_drive_encoders_reached(left_encoder-10363,right_encoder-10363,false)){
+                if (RobII.have_drive_encoders_reached(left_encoder-13000,right_encoder-13000,false)){
                     RobII.setDrivePower(0,0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -65,7 +65,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
             case 3:
                 RobII.setDrivePower((float) (.5 - RobII.adjspeed(1, RobII.a_gyro_heading()-45)), (float) (.5 + RobII.adjspeed(1, RobII.a_gyro_heading()-45)));
-                if (RobII.have_drive_encoders_reached(left_encoder-7763,right_encoder-7763,false)) {
+                if (RobII.have_drive_encoders_reached(left_encoder-8700,right_encoder-8700,false)) {
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -73,8 +73,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 4:
-                RobII.setDrivePower(1,-1);
-                if (RobII.a_gyro_heading()>=315){
+                RobII.setDrivePower(.6f,-.6f);
+                if (RobII.a_gyro_heading()<=315&&RobII.a_gyro_heading()>270){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -82,8 +82,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 5:
-                RobII.setDrivePower((float) (-.5 + RobII.adjspeed(1, RobII.a_gyro_heading()-315)), (float) (-.5 - RobII.adjspeed(1, RobII.a_gyro_heading()-315)));
-                if (RobII.a_ground_alpha()>=8){
+                RobII.setDrivePower((float) (-.3 + RobII.adjspeed(1, RobII.a_gyro_heading()-315)), (float) (-.3 - RobII.adjspeed(1, RobII.a_gyro_heading()-315)));
+                if (RobII.a_ground_alpha()>=5){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();

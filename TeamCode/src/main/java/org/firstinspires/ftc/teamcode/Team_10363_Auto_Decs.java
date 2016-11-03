@@ -71,6 +71,7 @@ public class Team_10363_Auto_Decs {
             v_motor_intake=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
+
         //Try to add the beacon pushing servos. The right one is in reverse.
         try{
             v_servo_left_beacon=ahwMap.servo.get("left beacon");
@@ -155,6 +156,7 @@ public class Team_10363_Auto_Decs {
         }
 
     }
+
     //Same as above, but for the right drive motor
     public void m_right_drive_power(float power){
         if (v_motor_right_drive!=null){

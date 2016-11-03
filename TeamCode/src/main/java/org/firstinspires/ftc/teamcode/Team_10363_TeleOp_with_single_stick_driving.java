@@ -24,7 +24,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         //set motor powers using single-stick driving methods
         leftPower=RobertII.single_stick_drive_left(gamepad1.left_stick_x,gamepad1.left_stick_y);
         rightPower=RobertII.single_stick_drive_right(gamepad1.left_stick_x,gamepad1.left_stick_y);
-        RobertII.setDrivePowerWithCorrection((float) leftPower, (float) rightPower);
+        RobertII.setDrivePowerWithCorrection((float) rightPower, (float) leftPower);
         //add motor powers to telemetry
         telemetry.addData("1: Left Drive Motor Power: ", leftPower);
         telemetry.addData("2: Right Drive Motor Power: ", rightPower);
@@ -34,14 +34,36 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
             if(mode==2){mode=-1;}
         }
         if (!gamepad1.x){
-            x_press=true;
+            x_press=false;
         }
         RobertII.m_intake_power(mode);
-
+        telemetry.addData("3: intake speed: ",mode);
+        if (gamepad1.y&&!y_press){
+            y_press=true;
+            liftmode++;
+            if(liftmode==2){liftmode=-1;}
+        }
+        if (!gamepad1.y){
+            y_press=false;
+        }
+        RobertII.m_lift_power(liftmode);
+        telemetry.addData("4: lift speed: ",liftmode);
+        if (gamepad1.a&&!a_press){
+            a_press=true;
+            beacons=!beacons;
+        }
+        if (!gamepad1.a){
+            a_press=false;
+        }
+        RobertII.press_or_reset_beacons(beacons);
     }
     double leftPower;
     double rightPower;
-    int mode;
+    int liftmode=1;
+    boolean y_press;
+    boolean beacons;
+    boolean a_press;
+    int mode=1;
     boolean x_press;
 
 }
