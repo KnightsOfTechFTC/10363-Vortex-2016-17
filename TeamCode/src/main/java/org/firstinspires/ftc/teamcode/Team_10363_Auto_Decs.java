@@ -22,6 +22,7 @@ public class Team_10363_Auto_Decs {
     //motors
     private DcMotor v_motor_left_drive;
     private DcMotor v_motor_right_drive;
+    private DcMotor v_motor_intake;
     //servos
     private Servo v_servo_left_beacon;
     private Servo v_servo_right_beacon;
@@ -56,6 +57,18 @@ public class Team_10363_Auto_Decs {
         }
         catch (Exception p_exception){
             v_motor_right_drive=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_motor_intake=ahwMap.dcMotor.get("intake");
+            v_motor_intake.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_intake.setPower(0);
+            v_motor_intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        //If it doesn't work, set the motor to null and add record the problem in the Debug log.
+        catch (Exception p_exception){
+            v_motor_intake=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         //Try to add the beacon pushing servos. The right one is in reverse.
@@ -99,7 +112,7 @@ public class Team_10363_Auto_Decs {
         //Try to add the color sensors
         try {
             GroundColor = ahwMap.colorSensor.get("ground");
-            GroundColor.setI2cAddress(I2cAddr.create7bit(0x3C));
+            GroundColor.setI2cAddress(I2cAddr.create8bit(0x3C));
             GroundColor.enableLed(true);
         }
         catch (Exception p_exception){
@@ -108,7 +121,7 @@ public class Team_10363_Auto_Decs {
         }
         try{
             LeftColor = ahwMap.colorSensor.get("left-color");
-            LeftColor.setI2cAddress(I2cAddr.create7bit(0x42));
+            LeftColor.setI2cAddress(I2cAddr.create8bit(0x42));
             LeftColor.enableLed(false);
         }
         catch (Exception p_exception){
@@ -117,7 +130,7 @@ public class Team_10363_Auto_Decs {
         }
         try {
             RightColor = ahwMap.colorSensor.get("right-color");
-            RightColor.setI2cAddress(I2cAddr.create7bit(0x44));
+            RightColor.setI2cAddress(I2cAddr.create8bit(0x44));
             RightColor.enableLed(false);
         }
         catch (Exception p_exception){
@@ -132,6 +145,13 @@ public class Team_10363_Auto_Decs {
         if (v_motor_left_drive!=null){
             float sendpower= Range.clip(power,-1,1);
             v_motor_left_drive.setPower(sendpower);
+        }
+
+    }
+    public void m_intake_power(float power){
+        if (v_motor_intake!=null){
+            float sendpower= Range.clip(power,-1,1);
+            v_motor_intake.setPower(sendpower);
         }
 
     }
@@ -236,21 +256,21 @@ public class Team_10363_Auto_Decs {
         if (GroundColor!=null) {
             return GroundColor.blue();
         }
-        else return 0;
+        else return -1;
     }
     public double a_ground_alpha(){
         return GroundColor.alpha();
 
     }
     public double a_left_blue(){
-        double returnthis = 0;
+        double returnthis = -1;
         if (LeftColor != null) {
             returnthis = LeftColor.blue();
         }
         return returnthis;
     }
     public double a_left_red(){
-        double returnthis = 0;
+        double returnthis = -1;
         if (LeftColor != null) {
             returnthis = LeftColor.red();
         }

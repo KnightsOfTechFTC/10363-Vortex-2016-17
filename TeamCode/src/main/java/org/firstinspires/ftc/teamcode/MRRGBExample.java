@@ -61,10 +61,10 @@ public class MRRGBExample extends LinearOpMode {
 
         // get a reference to our ColorSensor object.
         //sensorRGB = hardwareMap.colorSensor.get("mr");
-        sensorRGB = hardwareMap.colorSensor.get("left-color");
-        sensorRGB.setI2cAddress(I2cAddr.create7bit(0x42));
+        sensorRGB = hardwareMap.colorSensor.get("ground");
+        sensorRGB.setI2cAddress(I2cAddr.create8bit(0x3C));
         sensorRightRGB = hardwareMap.colorSensor.get("right-color");
-        sensorRightRGB.setI2cAddress(I2cAddr.create7bit(0x44));
+        sensorRightRGB.setI2cAddress(I2cAddr.create8bit(0x44));
         // bEnabled represents the state of the LED.
         boolean bEnabled = true;
 
@@ -143,6 +143,7 @@ public class MRRGBExample extends LinearOpMode {
             Color.RGBToHSV(sensorRGB.red()*8, sensorRGB.green()*8, sensorRGB.blue()*8, hsvValues);
 
             // send the info back to driver station using telemetry function.
+            telemetry.update();
             telemetry.addData("Clear", sensorRGB.alpha());
             telemetry.addData("Red  ", sensorRGB.red());
             telemetry.addData("Green", sensorRGB.green());

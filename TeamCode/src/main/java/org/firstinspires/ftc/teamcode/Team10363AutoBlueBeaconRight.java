@@ -19,6 +19,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
 
     @Override
     public void loop() {
+        RobII.m_intake_power(-1);
         telemetry.update();
         telemetry.addData("1: State",v_state);
         telemetry.addData("2: left encoder", RobII.a_left_encoder_pos());
@@ -73,7 +74,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
             case 4:
                 RobII.setDrivePower(1,-1);
-                if (RobII.a_gyro_heading()>=135 && RobII.a_gyro_heading()<180){
+                if (RobII.a_gyro_heading()>=315){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -81,7 +82,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 5:
-                RobII.setDrivePower((float) (.5 - RobII.adjspeed(1, RobII.a_gyro_heading()-135)), (float) (.5 + RobII.adjspeed(1, RobII.a_gyro_heading()-135)));
+                RobII.setDrivePower((float) (-.5 + RobII.adjspeed(1, RobII.a_gyro_heading()-315)), (float) (-.5 - RobII.adjspeed(1, RobII.a_gyro_heading()-315)));
                 if (RobII.a_ground_alpha()>=8){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -92,9 +93,9 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
             case 6:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>8){
-                    RobII.setDrivePower(0.5f,0.5f);}
-                else if (RobII.a_gyro_heading()>90){RobII.setDrivePower(.7f,0);}
-                else if (RobII.a_gyro_heading()<90){RobII.setDrivePower(0,.7f);}
+                    RobII.setDrivePower(-0.5f,-0.5f);}
+                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-.7f,0);}
+                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(0,-.7f);}
                 else {RobII.setDrivePower(.5f,.5f);}
                 if (leftEnconderProblems == RobII.a_left_encoder_pos() && rightEnconderProblems == RobII.a_right_encoder_pos()){
                     count = count + 1;
@@ -121,13 +122,16 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 RobII.move_left_beacon_to_read();
                 if (RobII.a_left_blue()>=2 && RobII.a_left_red()<2){
                     RobII.push_left_beacon();
+                    v_state++;
                 }
                 else if (RobII.a_left_red()>=2 && RobII.a_left_blue()<2){
                     RobII.push_right_beacon();
                     RobII.reset_left_beacon_servo();
+                    v_state++;
                 }
                 else {
                     RobII.reset_left_beacon_servo();
+                    v_state++;
                 }
                 break;
             case 8:

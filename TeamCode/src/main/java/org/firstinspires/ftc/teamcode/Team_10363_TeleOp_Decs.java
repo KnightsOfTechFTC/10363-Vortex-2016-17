@@ -15,8 +15,8 @@ public class Team_10363_TeleOp_Decs {
     //motors
     private DcMotor v_motor_left_drive;
     private DcMotor v_motor_right_drive;
-    //CR Servos
-    private CRServo v_servo_sweep;
+    private DcMotor v_motor_intake;
+
     //sensors
     private GyroSensor SensorGyro;
 
@@ -47,6 +47,18 @@ public class Team_10363_TeleOp_Decs {
             v_motor_right_drive=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
+        try{
+            v_motor_intake=ahwMap.dcMotor.get("intake");
+            v_motor_intake.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_intake.setPower(0);
+            v_motor_intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        //If it doesn't work, set the motor to null and add record the problem in the Debug log.
+        catch (Exception p_exception){
+            v_motor_intake=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
         //Try to add the gyro
         try {
             SensorGyro=ahwMap.gyroSensor.get("gyro");
@@ -65,14 +77,7 @@ public class Team_10363_TeleOp_Decs {
                 catch (Exception p_exception){}
             }
         }
-        try {
-            v_servo_sweep=ahwMap.crservo.get("sweep");
-            v_servo_sweep.setPower(0);
-        }
-        catch (Exception p_exception){
-            DbgLog.msg(p_exception.getLocalizedMessage());
-            v_servo_sweep=null;
-        }
+
 
 
     }
@@ -210,10 +215,11 @@ public class Team_10363_TeleOp_Decs {
     public double adjspeed(double speedModifier, int deltaAngle){
         return speedModifier*Math.sin(Math.toRadians(deltaAngle));
     }
-    //modifies sweep servo's speed
-    public  void m_sweep_speed(double speed){
-        if (v_servo_sweep!=null){
-            v_servo_sweep.setPower(Range.clip(speed, -1, 1));
+    public void m_intake_power(float power){
+        if (v_motor_intake!=null){
+            float sendpower=Range.clip(power,-1,1);
+            v_motor_intake.setPower(sendpower);
         }
     }
+
 }

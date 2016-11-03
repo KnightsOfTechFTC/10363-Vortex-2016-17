@@ -28,26 +28,20 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         //add motor powers to telemetry
         telemetry.addData("1: Left Drive Motor Power: ", leftPower);
         telemetry.addData("2: Right Drive Motor Power: ", rightPower);
-        //set intake servo's mode
-        if (gamepad2.a&&!a_press){
-            a_press=true;
-            if (intake_mode<=1){
-                intake_mode=-1;
-            }
-            else {
-                intake_mode++;
-            }
+        if (gamepad1.x&&!x_press){
+            x_press=true;
+            mode++;
+            if(mode==2){mode=-1;}
         }
-        if (!gamepad2.a){
-            a_press=false;
+        if (!gamepad1.x){
+            x_press=true;
         }
-        RobertII.m_sweep_speed(intake_mode);
-        telemetry.addData("3:Intake servo speed: ", intake_mode);
+        RobertII.m_intake_power(mode);
 
     }
     double leftPower;
     double rightPower;
-    int intake_mode=1;
-    boolean a_press=false;
+    int mode;
+    boolean x_press;
 
 }
