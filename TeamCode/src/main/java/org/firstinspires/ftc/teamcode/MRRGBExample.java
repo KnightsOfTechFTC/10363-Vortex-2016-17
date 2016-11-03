@@ -30,6 +30,7 @@ import android.view.View;
 
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.ftcrobotcontroller.R;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -45,12 +46,11 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
  * You can use the X button on either gamepad to turn the LED on and off.
  *
  */
+@Autonomous(name = "color sensor test")
 public class MRRGBExample extends LinearOpMode {
 
     ColorSensor sensorRGB;
     ColorSensor sensorRightRGB;
-
-
 
     @Override
     public void runOpMode() throws InterruptedException {
