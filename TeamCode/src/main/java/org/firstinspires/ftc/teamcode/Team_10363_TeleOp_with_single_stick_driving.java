@@ -24,10 +24,19 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         //set motor powers using single-stick driving methods
         leftPower=RobertII.single_stick_drive_left(gamepad1.left_stick_x,gamepad1.left_stick_y);
         rightPower=RobertII.single_stick_drive_right(gamepad1.left_stick_x,gamepad1.left_stick_y);
-        RobertII.setDrivePowerWithCorrection((float) rightPower, (float) leftPower);
+        if (gamepad1.b&&!b_press){
+            b_press=true;
+            slow=slow+.7;
+            if slow>1{slow=.3}
+        }
+        if (!gamepad1.b){
+            b_press=false;
+        }
+        RobertII.setDrivePowerWithCorrection((float) (rightPower*slow), (float) (leftPower*slow));
         //add motor powers to telemetry
-        telemetry.addData("1: Left Drive Motor Power: ", leftPower);
-        telemetry.addData("2: Right Drive Motor Power: ", rightPower);
+        telemetry.addData("0: Slow Mode Modifier: ", slow)
+        telemetry.addData("1: Right Drive Motor Power: ", leftPower*slow);
+        telemetry.addData("2: Left Drive Motor Power: ", rightPower*slow);
         if (gamepad1.x&&!x_press){
             x_press=true;
             mode++;
@@ -60,6 +69,8 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
     double leftPower;
     double rightPower;
     int liftmode=1;
+    double slow=1;
+    boolean b_press;
     boolean y_press;
     boolean beacons;
     boolean a_press;
