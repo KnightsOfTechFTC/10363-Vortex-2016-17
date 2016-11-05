@@ -26,8 +26,8 @@ public class Team_10363_TeleOp_tank extends OpMode {
         rightPower=gamepad1.left_stick_x;
         if (gamepad1.b&&!b_press){
             b_press=true;
-            slow=slow+.7;
-            if (slow>1){slow=.3;}
+            slow=slow+.6;
+            if (slow>1){slow=.4;}
         }
         if (!gamepad1.b){
             b_press=false;
