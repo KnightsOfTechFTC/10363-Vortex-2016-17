@@ -19,17 +19,24 @@ public class QuickAutoRed extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("state ",state);
+        telemetry.addData("left-encoder",RobTest.a_left_encoder_pos());
+        telemetry.addData("right-encoder",RobTest.a_right_encoder_pos());
+        telemetry.addData("ground white", RobTest.a_ground_alpha());
+        telemetry.addData("heading",RobTest.a_gyro_heading());
         switch (state){
             case 0:
-                RobTest.setDrivePower(.3f,-.3f);
-                if (RobTest.have_drive_encoders_reached(encoderLeft-1440,1440+encoderRight,true)) {
+                RobTest.setDrivePower(-.3f,.3f);
+                if (RobTest.have_drive_encoders_reached(encoderLeft+1440,-2440+encoderRight,true)) {
                     RobTest.setDrivePower(0, 0);
+                    encoderLeft=RobTest.a_left_encoder_pos();
+                    encoderRight=RobTest.a_right_encoder_pos();
                     state++;
                 }
                 break;
             case 1:
-                RobTest.setDrivePower(((float) (-.3 - RobTest.adjspeed(1, RobTest.a_gyro_heading()-315))), (float) (-.3 + RobTest.adjspeed(1, RobTest.a_gyro_heading()-315)));
-                if (RobTest.a_ground_alpha()>=7||RobTest.have_drive_encoders_reached(20000,20000,true)){
+                RobTest.setDrivePower(((float) (-.3 + RobTest.adjspeed(1, RobTest.a_gyro_heading()-315))), (float) (-.3 - RobTest.adjspeed(1, RobTest.a_gyro_heading()-315)));
+                if (RobTest.a_ground_alpha()>=7&&RobTest.have_drive_encoders_reached(20000+encoderLeft,20000+encoderRight,true)){
                     RobTest.setDrivePower(0,0);
                     encoderLeft=RobTest.a_left_encoder_pos();
                     encoderRight=RobTest.a_right_encoder_pos();
