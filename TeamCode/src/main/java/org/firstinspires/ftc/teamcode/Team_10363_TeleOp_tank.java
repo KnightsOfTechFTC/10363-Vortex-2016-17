@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
- * Created by Lego5 on 10/16/2016.
+ * Created by Lego5 on 11/5/2016.
  */
-@TeleOp(name = "10363 Competition TeleOp (with Single-Stick Driving")
-public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
+@TeleOp(name = "10363 Competition TeleOp (with Tank Drive)")
+public class Team_10363_TeleOp_tank extends OpMode {
     /* RIP Robert the Robot 2015-2016. May his Res-Q skills be remembered by his 2 children,
         Robert II (a temp name) and JVBot (also a temp name) and his lifelong friend 9924Bot.  */
     Team_10363_TeleOp_Decs RobertII= new Team_10363_TeleOp_Decs();
@@ -22,8 +22,8 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         //update telemetry
         telemetry.update();
         //set motor powers using single-stick driving methods
-        leftPower=RobertII.single_stick_drive_left(gamepad1.left_stick_x,gamepad1.left_stick_y);
-        rightPower=RobertII.single_stick_drive_right(gamepad1.left_stick_x,gamepad1.left_stick_y);
+        leftPower=gamepad1.right_stick_x;
+        rightPower=gamepad1.left_stick_x;
         if (gamepad1.b&&!b_press){
             b_press=true;
             slow=slow+.7;
