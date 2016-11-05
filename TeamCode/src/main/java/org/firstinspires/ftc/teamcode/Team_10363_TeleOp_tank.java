@@ -22,8 +22,8 @@ public class Team_10363_TeleOp_tank extends OpMode {
         //update telemetry
         telemetry.update();
         //set motor powers using single-stick driving methods
-        leftPower=gamepad1.right_stick_x;
-        rightPower=gamepad1.left_stick_x;
+        leftPower=gamepad1.right_stick_y;
+        rightPower=gamepad1.left_stick_y;
         if (gamepad1.b&&!b_press){
             b_press=true;
             slow=slow+.6;
