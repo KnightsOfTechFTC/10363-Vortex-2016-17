@@ -18,6 +18,8 @@ public class Team_10363_TeleOp_Decs {
     private DcMotor v_motor_right_drive;
     private DcMotor v_motor_intake;
     private DcMotor v_motor_lift;
+    private DcMotor v_motor_cap_left;
+    private DcMotor v_motor_cap_right;
 
     //servos
     private Servo v_servo_left_beacon;
@@ -51,6 +53,28 @@ public class Team_10363_TeleOp_Decs {
         }
         catch (Exception p_exception){
             v_motor_right_drive=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try {
+            v_motor_cap_right=ahwMap.dcMotor.get("cap-right");
+            v_motor_cap_right.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_cap_right.setPower(0);
+            v_motor_cap_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_cap_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        catch (Exception p_exception){
+            v_motor_cap_right=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try {
+            v_motor_cap_left=ahwMap.dcMotor.get("cap-left");
+            v_motor_cap_left.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_cap_left.setPower(0);
+            v_motor_cap_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_cap_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        catch (Exception p_exception){
+            v_motor_cap_left=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         try{
@@ -257,7 +281,15 @@ public class Team_10363_TeleOp_Decs {
             float sendpower= Range.clip(power,-1,1);
             v_motor_lift.setPower(sendpower);
         }
+        
 
+    }
+    public void m_cap_power(float power){
+        if(v_motor_cap_left!=null&&v_motor_cap_right!=null){
+            float sendpower=Range.clip(power,-1,1);
+            v_motor_cap_left.setPower(sendpower);
+            v_motor_cap_right.setPower(sendpower);
+        }
     }
     public void m_intake_power(float power){
         if (v_motor_intake!=null){
