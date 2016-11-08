@@ -84,10 +84,21 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
            case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>=7){
-                    RobII.setDrivePower(-0.1f,-0.1f);}
-                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-.1f,.1f);}
-                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(.1f,-.1f);}
-                else {RobII.setDrivePower(.1f,.1f);}
+                    RobII.setDrivePower(-0.1f,-0.1f);
+                    telemetry.addData("11: Move State: ","sees white line")
+                }
+                else if (RobII.a_gyro_heading()>270){
+                    RobII.setDrivePower(-.1f,.1f);
+                    telemetry.addData("11: Move State: ","gyro >270")
+                }
+                else if (RobII.a_gyro_heading()<270){
+                    RobII.setDrivePower(.1f,-.1f);
+                    telemetry.addData("11: Move State: ","gyro <270")
+                }
+                else {
+                    RobII.setDrivePower(-.1f,-.1f);
+                    telemetry.addData("11: Move State: ","gyro=270")
+                }
                 if (leftEnconderProblems == RobII.a_left_encoder_pos() && rightEnconderProblems == RobII.a_right_encoder_pos()){
                     count = count + 1;
                 }else {
