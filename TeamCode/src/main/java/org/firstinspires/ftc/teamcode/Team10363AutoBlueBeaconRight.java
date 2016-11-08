@@ -52,7 +52,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
             case 2:
                 RobII.setDrivePower((float) (.3 - RobII.adjspeed(1, RobII.a_gyro_heading()-45)), (float) (.3 + RobII.adjspeed(1, RobII.a_gyro_heading()-45)));
-                if (RobII.have_drive_encoders_reached(left_encoder-9924,right_encoder-9924,false)){
+                if (RobII.have_drive_encoders_reached(left_encoder-10524,right_encoder-10524,false)){
                     RobII.setDrivePower(0,0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -69,7 +69,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 4:
-                RobII.setDrivePower((float) (-.2 + RobII.adjspeed(2, RobII.a_gyro_heading()-340)), (float) (-.2 - RobII.adjspeed(2, RobII.a_gyro_heading()-340)));
+                RobII.setDrivePower(-.2f,-.2f);
+//                RobII.setDrivePower((float) (-.2 + RobII.adjspeed(2, RobII.a_gyro_heading()-340)), (float) (-.2 - RobII.adjspeed(2, RobII.a_gyro_heading()-340)));
                 if (RobII.a_ground_alpha()>=7){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -82,11 +83,11 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
            case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
-                if (RobII.a_ground_alpha()>8){
-                    RobII.setDrivePower(-0.5f,-0.5f);}
-                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-.3f,.3f);}
-                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(.3f,-.3f);}
-                else {RobII.setDrivePower(.5f,.5f);}
+                if (RobII.a_ground_alpha()>=7){
+                    RobII.setDrivePower(-0.1f,-0.1f);}
+                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-.1f,.1f);}
+                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(.1f,-.1f);}
+                else {RobII.setDrivePower(.1f,.1f);}
                 if (leftEnconderProblems == RobII.a_left_encoder_pos() && rightEnconderProblems == RobII.a_right_encoder_pos()){
                     count = count + 1;
                 }else {
