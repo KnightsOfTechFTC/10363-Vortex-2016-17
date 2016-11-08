@@ -15,11 +15,13 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
         RobII.init(hardwareMap);
         left_encoder = RobII.a_left_encoder_pos();
         right_encoder = RobII.a_right_encoder_pos();
+        telemetry.addData("4: Heading", RobII.a_gyro_heading());
+        telemetry.addData("6: Ground Color (Alpha)", RobII.a_ground_alpha());
     }
 
     @Override
     public void loop() {
-        RobII.m_intake_power(-1);
+//        RobII.m_intake_power(-1);
         telemetry.update();
         telemetry.addData("1: State",v_state);
         telemetry.addData("2: left encoder", RobII.a_left_encoder_pos());
@@ -51,7 +53,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 2:
-                RobII.setDrivePower((float) (.3 - RobII.adjspeed(1, RobII.a_gyro_heading()-45)), (float) (.3 + RobII.adjspeed(1, RobII.a_gyro_heading()-45)));
+                RobII.setDrivePower((float) (0.3 - RobII.adjspeed(1, RobII.a_gyro_heading()-45)), (float) (0.3 + RobII.adjspeed(1, RobII.a_gyro_heading()-45)));
                 if (RobII.have_drive_encoders_reached(left_encoder-10524,right_encoder-10524,false)){
                     RobII.setDrivePower(0,0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -60,7 +62,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 3:
-                RobII.setDrivePower(-.3f,.3f);
+                RobII.setDrivePower(-0.3f,0.3f);
                 if ((RobII.a_gyro_heading() <= 340) && (RobII.a_gyro_heading() > 290)){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -69,7 +71,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 4:
-                RobII.setDrivePower(-.2f,-.2f);
+                if (RobII.a_ground_alpha()==255) {v_state=255; break;}  // if the color sensor isn't working, just stop autonomous
+                RobII.setDrivePower(-0.2f,-0.2f);
 //                RobII.setDrivePower((float) (-.2 + RobII.adjspeed(2, RobII.a_gyro_heading()-340)), (float) (-.2 - RobII.adjspeed(2, RobII.a_gyro_heading()-340)));
                 if (RobII.a_ground_alpha()>=7){
                     RobII.setDrivePower(0, 0);
@@ -77,37 +80,38 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                     right_encoder = RobII.a_right_encoder_pos();
                     v_state++;
                 }
-                if (RobII.have_drive_encoders_reached(-4000+left_encoder,right_encoder-4000,false)){
+                if (RobII.have_drive_encoders_reached(left_encoder+4000,right_encoder+4000,true)){
+                    RobII.setDrivePower(0, 0);
                     v_state++;
                 }
                 break;
-           case 5:
+            case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>=7){
-                    RobII.setDrivePower(-0.1f,-0.1f);}
-                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-.1f,.1f);}
-                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(.1f,-.1f);}
-                else {RobII.setDrivePower(.1f,.1f);}
-                if (leftEnconderProblems == RobII.a_left_encoder_pos() && rightEnconderProblems == RobII.a_right_encoder_pos()){
+                    RobII.setDrivePower(-0.2f,-0.2f);}
+                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-0.2f,0.2f);}
+                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(0.2f,-0.2f);}
+                else {RobII.setDrivePower(-0.2f,-0.2f);}
+/*                if (leftEncoderProblems == RobII.a_left_encoder_pos() && rightEncoderProblems == RobII.a_right_encoder_pos()){
                     count = count + 1;
                 }else {
                     count = 0;
-                    leftEnconderProblems = RobII.a_left_encoder_pos();
-                    rightEnconderProblems = RobII.a_right_encoder_pos();
+                    leftEncoderProblems = RobII.a_left_encoder_pos();
+                    rightEncoderProblems = RobII.a_right_encoder_pos();
                 }
                 // Is counter greater than 126 iters (3*42)? If so, skip to next state.
                 if (count > 126){
-                    RobII.setDrivePower(0.0f, 0.0f);
+                    RobII.setDrivePower(0, 0);
                     left_encoder=RobII.a_left_encoder_pos();
                     right_encoder=RobII.a_right_encoder_pos();
                     v_state++;
                 }
                 else if (RobII.a_left_encoder_pos()-left_encoder+RobII.a_right_encoder_pos()-right_encoder<=-7763){
-                    RobII.setDrivePower(0.0f, 0.0f);
+                    RobII.setDrivePower(0, 0);
                     left_encoder=RobII.a_left_encoder_pos();
                     right_encoder=RobII.a_right_encoder_pos();
                     v_state++;
-                }
+                } */
                 break;
             case 6:
                 RobII.move_left_beacon_to_read();
@@ -145,8 +149,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
     int left_encoder=0;
     int right_encoder=0;
     int count=0;
-    int leftEnconderProblems=0;
-    int rightEnconderProblems=0;
+    int leftEncoderProblems=0;
+    int rightEncoderProblems=0;
 
 
 

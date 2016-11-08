@@ -138,23 +138,20 @@ public class Team_10363_Auto_Decs {
             DbgLog.msg(p_exception.getLocalizedMessage());
             RightColor=null;
         }
-
-
     }
+
     //Modifies the left drive motor's power
     public void m_left_drive_power(float power){
         if (v_motor_left_drive!=null){
             float sendpower= Range.clip(power,-1,1);
             v_motor_left_drive.setPower(sendpower);
         }
-
     }
     public void m_intake_power(float power){
         if (v_motor_intake!=null){
             float sendpower= Range.clip(power,-1,1);
             v_motor_intake.setPower(sendpower);
         }
-
     }
 
     //Same as above, but for the right drive motor
