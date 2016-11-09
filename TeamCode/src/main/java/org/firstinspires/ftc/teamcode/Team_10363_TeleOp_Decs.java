@@ -145,7 +145,7 @@ public class Team_10363_TeleOp_Decs {
     //Modifies the left drive motor's power
     public void m_left_drive_power(float power){
         if (v_motor_left_drive!=null){
-            float sendpower= Range.clip(power,-1,1);
+            float sendpower= Range.clip(power,-.8f,.8f);
             v_motor_left_drive.setPower(sendpower);
         }
 
@@ -153,7 +153,7 @@ public class Team_10363_TeleOp_Decs {
     //Same as above, but for the right drive motor
     public void m_right_drive_power(float power){
         if (v_motor_right_drive!=null){
-            float sendpower=Range.clip(power,-1,1);
+            float sendpower=Range.clip(power,-.8f,.8f);
             v_motor_right_drive.setPower(sendpower);
         }
     }

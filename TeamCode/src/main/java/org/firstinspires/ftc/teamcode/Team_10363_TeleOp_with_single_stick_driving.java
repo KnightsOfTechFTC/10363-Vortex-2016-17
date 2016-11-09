@@ -69,7 +69,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
     }
     double leftPower;
     double rightPower;
-    int liftmode=1;
+    int liftmode=0;
     double slow=1;
     boolean b_press;
     boolean y_press;
