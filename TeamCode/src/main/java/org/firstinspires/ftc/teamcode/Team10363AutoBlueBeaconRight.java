@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 /**
@@ -17,6 +18,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
         right_encoder = RobII.a_right_encoder_pos();
         telemetry.addData("4: Heading", RobII.a_gyro_heading());
         telemetry.addData("6: Ground Color (Alpha)", RobII.a_ground_alpha());
+        telemetry.update();
     }
 
     @Override
@@ -36,7 +38,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
         switch (v_state) {
             case 0:
                 RobII.setDrivePower((float) (.5 - RobII.adjspeed(1, RobII.a_gyro_heading())), (float) (.5 + RobII.adjspeed(1, RobII.a_gyro_heading())));
-                if (RobII.have_drive_encoders_reached(left_encoder-4620, right_encoder-4620, false)){
+                if (RobII.have_drive_encoders_reached(left_encoder-4220, right_encoder-4220, false)){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -44,7 +46,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 1:
-                RobII.setDrivePower(1, 0);
+                RobII.setDrivePower((float) .4, 0);
                 if (RobII.a_gyro_heading() >= 40 && RobII.a_gyro_heading() < 180) {
                     RobII.setDrivePower(0, 0);
                     v_state++;
@@ -62,7 +64,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 3:
-                RobII.setDrivePower(-.3f,.3f);
+                RobII.setDrivePower((float) -.3, (float) .3);
                 if ((RobII.a_gyro_heading() <= 340) && (RobII.a_gyro_heading() > 290)){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -72,7 +74,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
             case 4:
                 if (RobII.a_ground_alpha()==255) {v_state=255; break;}  // if the color sensor isn't working, just stop autonomous
-                RobII.setDrivePower(-0.2f,-0.2f);
+                RobII.setDrivePower((float) -0.2, (float) -0.2);
 //                RobII.setDrivePower((float) (-.2 + RobII.adjspeed(2, RobII.a_gyro_heading()-340)), (float) (-.2 - RobII.adjspeed(2, RobII.a_gyro_heading()-340)));
                 if (RobII.a_ground_alpha()>=7){
                     RobII.setDrivePower(0, 0);
@@ -88,21 +90,26 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
             case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>=7){
-                    RobII.setDrivePower(-0.2f,-0.2f);
+                    RobII.setDrivePower((float) -.2, (float) -.2);
                     telemetry.addData("11: Move State: ","sees white line");
+                    telemetry.update();
                 }
                 else if (RobII.a_gyro_heading()>270){
-                    RobII.setDrivePower(-.2f,.2f);
+                    RobII.setDrivePower((float) -.2, (float) .2);
                     telemetry.addData("11: Move State: ","gyro >270");
+                    telemetry.update();
                 }
                 else if (RobII.a_gyro_heading()<270){
                     RobII.setDrivePower(.2f,-.2f);
                     telemetry.addData("11: Move State: ","gyro <270");
+                    telemetry.update();
                 }
                 else {
                     RobII.setDrivePower(-.2f,-.2f);
                     telemetry.addData("11: Move State: ","gyro=270");
+                    telemetry.update();
                 }
+                // Check for motors stalling
                 if (leftEncoderProblems == RobII.a_left_encoder_pos() && rightEncoderProblems == RobII.a_right_encoder_pos()){
                     count = count + 1;
                 }else {
@@ -110,7 +117,6 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                     leftEncoderProblems = RobII.a_left_encoder_pos();
                     rightEncoderProblems = RobII.a_right_encoder_pos();
                 }
-                // Check for motors stalling
                 // Is counter greater than 126 iters (3*42)? If so, skip to next state.
                 if (count > 126){
                     RobII.setDrivePower(0.0f, 0.0f);

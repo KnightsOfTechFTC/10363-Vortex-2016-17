@@ -74,7 +74,7 @@ public class Team_10363_TeleOp_tank extends OpMode {
     boolean y_press;
     boolean beacons;
     boolean a_press;
-    int mode=1;
+    int mode=0;
     boolean x_press;
 
 }
