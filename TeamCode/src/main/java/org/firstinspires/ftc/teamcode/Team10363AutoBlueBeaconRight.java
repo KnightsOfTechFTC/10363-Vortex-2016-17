@@ -53,7 +53,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 2:
-                RobII.setDrivePower((float) (0.3 - RobII.adjspeed(1, RobII.a_gyro_heading()-45)), (float) (0.3 + RobII.adjspeed(1, RobII.a_gyro_heading()-45)));
+                RobII.setDrivePower((float) (.3 - RobII.adjspeed(1, RobII.a_gyro_heading()-45)), (float) (.3 + RobII.adjspeed(1, RobII.a_gyro_heading()-45)));
                 if (RobII.have_drive_encoders_reached(left_encoder-10524,right_encoder-10524,false)){
                     RobII.setDrivePower(0,0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -62,7 +62,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 break;
             case 3:
-                RobII.setDrivePower(-0.3f,0.3f);
+                RobII.setDrivePower(-.3f,.3f);
                 if ((RobII.a_gyro_heading() <= 340) && (RobII.a_gyro_heading() > 290)){
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
@@ -88,11 +88,22 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
             case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>=7){
-                    RobII.setDrivePower(-0.2f,-0.2f);}
-                else if (RobII.a_gyro_heading()>270){RobII.setDrivePower(-0.2f,0.2f);}
-                else if (RobII.a_gyro_heading()<270){RobII.setDrivePower(0.2f,-0.2f);}
-                else {RobII.setDrivePower(-0.2f,-0.2f);}
-/*                if (leftEncoderProblems == RobII.a_left_encoder_pos() && rightEncoderProblems == RobII.a_right_encoder_pos()){
+                    RobII.setDrivePower(-0.1f,-0.1f);
+                    telemetry.addData("11: Move State: ","sees white line");
+                }
+                else if (RobII.a_gyro_heading()>270){
+                    RobII.setDrivePower(-.1f,.1f);
+                    telemetry.addData("11: Move State: ","gyro >270");
+                }
+                else if (RobII.a_gyro_heading()<270){
+                    RobII.setDrivePower(.1f,-.1f);
+                    telemetry.addData("11: Move State: ","gyro <270");
+                }
+                else {
+                    RobII.setDrivePower(-.1f,-.1f);
+                    telemetry.addData("11: Move State: ","gyro=270");
+                }
+                if (leftEnconderProblems == RobII.a_left_encoder_pos() && rightEnconderProblems == RobII.a_right_encoder_pos()){
                     count = count + 1;
                 }else {
                     count = 0;
@@ -101,17 +112,17 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 }
                 // Is counter greater than 126 iters (3*42)? If so, skip to next state.
                 if (count > 126){
-                    RobII.setDrivePower(0, 0);
+                    RobII.setDrivePower(0.0f, 0.0f);
                     left_encoder=RobII.a_left_encoder_pos();
                     right_encoder=RobII.a_right_encoder_pos();
                     v_state++;
                 }
                 else if (RobII.a_left_encoder_pos()-left_encoder+RobII.a_right_encoder_pos()-right_encoder<=-7763){
-                    RobII.setDrivePower(0, 0);
+                    RobII.setDrivePower(0.0f, 0.0f);
                     left_encoder=RobII.a_left_encoder_pos();
                     right_encoder=RobII.a_right_encoder_pos();
                     v_state++;
-                } */
+                }
                 break;
             case 6:
                 RobII.move_left_beacon_to_read();
