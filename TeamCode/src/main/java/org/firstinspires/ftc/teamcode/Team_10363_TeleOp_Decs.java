@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -57,7 +58,7 @@ public class Team_10363_TeleOp_Decs {
         }
         try {
             v_motor_cap_right=ahwMap.dcMotor.get("cap-right");
-            v_motor_cap_right.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_cap_right.setDirection(DcMotor.Direction.FORWARD);
             v_motor_cap_right.setPower(0);
             v_motor_cap_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_cap_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -68,7 +69,7 @@ public class Team_10363_TeleOp_Decs {
         }
         try {
             v_motor_cap_left=ahwMap.dcMotor.get("cap-left");
-            v_motor_cap_left.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_cap_left.setDirection(DcMotor.Direction.REVERSE);
             v_motor_cap_left.setPower(0);
             v_motor_cap_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_cap_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

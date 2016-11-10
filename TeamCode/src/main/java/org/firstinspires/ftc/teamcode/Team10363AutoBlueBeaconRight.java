@@ -47,11 +47,11 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
             case 1:
                 RobII.setDrivePower((float) .4, 0);
-                if (RobII.a_gyro_heading() >= 40 && RobII.a_gyro_heading() < 180) {
+                if (RobII.a_gyro_heading() >= 35 && RobII.a_gyro_heading() < 90) {
                     RobII.setDrivePower(0, 0);
-                    v_state++;
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
+                    v_state++;
                 }
                 break;
             case 2:
@@ -87,7 +87,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                     v_state++;
                 }
                 break;
-            case 5:
+/*            case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
                 if (RobII.a_ground_alpha()>=7){
                     RobII.setDrivePower((float) -.2, (float) -.2);
@@ -130,8 +130,26 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                     right_encoder=RobII.a_right_encoder_pos();
                     v_state++;
                 }
+                break; */
+            case 5:  //alternate case 5, encoder drive instead of line following
+                RobII.setDrivePower((float) -.3, (float) .3);
+                if (RobII.a_gyro_heading() <= 290 && RobII.a_gyro_heading() > 240) {
+                    RobII.setDrivePower(0, 0);
+                    left_encoder = RobII.a_left_encoder_pos();
+                    right_encoder = RobII.a_right_encoder_pos();
+                    v_state++;
+                }
                 break;
             case 6:
+                RobII.setDrivePower((float) -.2, (float) -.2);
+                if (RobII.have_drive_encoders_reached(left_encoder + 2880, right_encoder + 2880, false)) {
+                    RobII.setDrivePower(0, 0);
+                    left_encoder = RobII.a_left_encoder_pos();
+                    right_encoder = RobII.a_right_encoder_pos();
+                    v_state++;
+                }
+                break;
+            case 7:
                 RobII.move_left_beacon_to_read();
                 if (RobII.a_left_blue()>=2 && RobII.a_left_red()<2){
                     RobII.push_left_beacon();

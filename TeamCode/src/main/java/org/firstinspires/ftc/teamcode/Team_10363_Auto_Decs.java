@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -143,7 +142,7 @@ public class Team_10363_Auto_Decs {
     //Modifies the left drive motor's power
     public void m_left_drive_power(float power){
         if (v_motor_left_drive!=null){
-            float sendpower= Range.clip(power,-1,1);
+            float sendpower= Range.clip(power,-.6f,.6f);
             v_motor_left_drive.setPower(sendpower);
         }
     }
@@ -157,7 +156,7 @@ public class Team_10363_Auto_Decs {
     //Same as above, but for the right drive motor
     public void m_right_drive_power(float power){
         if (v_motor_right_drive!=null){
-            float sendpower=Range.clip(power,-1,1);
+            float sendpower=Range.clip(power,-.6f,.6f);
             v_motor_right_drive.setPower(sendpower);
         }
     }

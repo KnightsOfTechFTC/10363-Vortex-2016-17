@@ -37,6 +37,13 @@ public class Team_10363_TeleOp_tank extends OpMode {
         telemetry.addData("0: Slow Mode Modifier: ", slow);
         telemetry.addData("1: Right Drive Motor Power: ", leftPower*slow);
         telemetry.addData("2: Left Drive Motor Power: ", rightPower*slow);
+
+        if (gamepad1.dpad_up) {cap_updown = 1;}
+        else if (gamepad1.dpad_down) {cap_updown = -1;}
+        else {cap_updown=0;}
+
+        RobertII.m_cap_power(cap_updown);
+
         if (gamepad1.x&&!x_press){
             x_press=true;
             mode++;
@@ -76,5 +83,6 @@ public class Team_10363_TeleOp_tank extends OpMode {
     boolean a_press;
     int mode=0;
     boolean x_press;
+    int cap_updown=0;
 
 }
