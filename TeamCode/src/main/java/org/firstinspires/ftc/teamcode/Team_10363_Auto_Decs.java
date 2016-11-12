@@ -179,6 +179,17 @@ public class Team_10363_Auto_Decs {
         }
         else {return -36000;}
     }
+    public double actual_left_power(){
+        if (v_motor_left_drive!=null){
+            return v_motor_left_drive.getPower();
+        } else return 0;
+    }
+    public double actual_right_power(){
+        if (v_motor_right_drive!=null){
+            return v_motor_right_drive.getPower();
+        } else return 0;
+    }
+
     //Resets the left drive wheel encoder.
     public void reset_left_drive_encoder ()
 
