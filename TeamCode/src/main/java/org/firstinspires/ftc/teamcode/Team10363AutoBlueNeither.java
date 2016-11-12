@@ -25,7 +25,7 @@ public class Team10363AutoBlueNeither extends OpMode {
         switch (v_state) {
             case 0:
                 RobII.setDrivePower((float) (.5 - RobII.adjspeed(1, RobII.a_gyro_heading())), (float) (.5 + RobII.adjspeed(1, RobII.a_gyro_heading())));
-                if (RobII.have_drive_encoders_reached(left_encoder - 6000, right_encoder - 6000, false)) {
+                if (RobII.have_drive_encoders_reached(left_encoder - 4220, right_encoder - 4220, false)) {
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
@@ -43,7 +43,7 @@ public class Team10363AutoBlueNeither extends OpMode {
                 break;
             case 2:
                 RobII.setDrivePower((float) (.3 - RobII.adjspeed(1, RobII.a_gyro_heading() - 45)), (float) (.3 + RobII.adjspeed(1, RobII.a_gyro_heading() - 45)));
-                if (RobII.have_drive_encoders_reached(left_encoder - 10524, right_encoder - 10524, false)) {
+                if (RobII.have_drive_encoders_reached(left_encoder - 5000, right_encoder - 5000, false)) {
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();

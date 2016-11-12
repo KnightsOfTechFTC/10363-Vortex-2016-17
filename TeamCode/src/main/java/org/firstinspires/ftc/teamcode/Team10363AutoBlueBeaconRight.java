@@ -50,7 +50,7 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break;
             case 1:
                 RobII.setDrivePower((float) .4, 0);
-                if (RobII.a_gyro_heading() >= 35 && RobII.a_gyro_heading() < 90) {
+                if (RobII.a_gyro_heading() >= 32 && RobII.a_gyro_heading() < 90) {
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
