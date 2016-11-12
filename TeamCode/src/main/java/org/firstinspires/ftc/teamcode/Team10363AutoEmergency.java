@@ -19,7 +19,7 @@ public class Team10363AutoEmergency extends OpMode {
         switch (v_state) {
             case 0:
                 Rob.setDrivePower((float) (.5 - Rob.adjspeed(1, Rob.a_gyro_heading())), (float) (.5 + Rob.adjspeed(1, Rob.a_gyro_heading())));
-                if (Rob.have_drive_encoders_reached(left_encoder - 4640, right_encoder - 4648, false)) {
+                if (Rob.have_drive_encoders_reached(left_encoder - 1500, right_encoder - 1500, false)) {
                     Rob.setDrivePower(0, 0);
                     left_encoder = Rob.a_left_encoder_pos();
                     right_encoder = Rob.a_right_encoder_pos();
@@ -29,7 +29,7 @@ public class Team10363AutoEmergency extends OpMode {
 
             case 1:
                 Rob.setDrivePower((float) .4, 0);
-                if (Rob.a_gyro_heading() >= 260 && Rob.a_gyro_heading() < 290) {
+                if (Rob.a_gyro_heading() >=  -95 && Rob.a_gyro_heading() < -85) {
                     Rob.setDrivePower(0, 0);
                     left_encoder = Rob.a_left_encoder_pos();
                     right_encoder = Rob.a_right_encoder_pos();
@@ -38,7 +38,7 @@ public class Team10363AutoEmergency extends OpMode {
                     break;
             case 2:
                 Rob.setDrivePower((float) (.2), (float) (.2));
-                if (Rob.have_drive_encoders_reached(left_encoder-6455,right_encoder-6455,false)){
+                if (Rob.have_drive_encoders_reached(left_encoder-800,right_encoder-800,false)){
                     Rob.setDrivePower(0,0);
                     left_encoder = Rob.a_left_encoder_pos();
                     right_encoder = Rob.a_right_encoder_pos();
