@@ -87,6 +87,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                     RobII.setDrivePower(0, 0);
                     v_state++;
                 }
+                encoderLeft=RobII.a_left_encoder_pos();
+                encoderRight=RobII.a_right_encoder_pos();
                 break;
 /*            case 5:
                 //Robert's Jukes. Also called LineFollower because it follows the white line based on gyro and color sensors.
@@ -134,11 +136,11 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
                 break; */
             case 5:  //alternate case 5, encoder drive instead of line following
                 RobII.setDrivePower((float) -.3, (float) .3);
-                if (RobII.have_drive_encoders_reached(left_encoder+720,-2440+right_encoder,true)) {
+                if (RobII.have_drive_encoders_reached(encoderLeft+1440,-2440+encoderRight,true)) {
                     RobII.setDrivePower(0, 0);
                     left_encoder = RobII.a_left_encoder_pos();
                     right_encoder = RobII.a_right_encoder_pos();
-                    v_state++;
+                    v_state+=3;
                 }
                 break;
             case 6:
@@ -202,6 +204,8 @@ public class Team10363AutoBlueBeaconRight extends OpMode{
     int v_state=0;
     int left_encoder=0;
     int right_encoder=0;
+    int encoderLeft;
+    int encoderRight;
     int count=0;
     int leftEncoderProblems=0;
     int rightEncoderProblems=0;

@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 /**
  * Created by Lego5 on 11/5/2016.
  */
+@Disabled
 @Autonomous (name="Quick Autonomous(red)")
 public class QuickAutoRed extends OpMode {
     Team_10363_Auto_Decs RobTest= new Team_10363_Auto_Decs();
@@ -16,7 +18,6 @@ public class QuickAutoRed extends OpMode {
         encoderLeft=RobTest.a_left_encoder_pos();
         encoderRight=RobTest.a_right_encoder_pos();
     }
-
     @Override
     public void loop() {
         telemetry.addData("state ",state);

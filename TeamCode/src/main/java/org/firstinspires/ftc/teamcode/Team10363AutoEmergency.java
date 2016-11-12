@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 /**
  * Created by Lego3 on 11/11/2016.
  */
-@Autonomous(name = "10363 Competition Autonomous on Red Alliance (left beacon)")
+@Autonomous(name = "10363 Competition Autonomous (emergency)")
 public class Team10363AutoEmergency extends OpMode {
     Team_10363_Auto_Decs Rob=new Team_10363_Auto_Decs();
     @Override
