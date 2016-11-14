@@ -33,7 +33,7 @@ public class Team_10363_Auto_Decs {
 
     public void init(HardwareMap ahwMap) {
         /*Try to add the left drive motor, stop it if it's moving, set zero power behavior
-        * to "brake", and turn encoders on. */
+        * to brake, and turn encoders on. */
         try{
             v_motor_left_drive=ahwMap.dcMotor.get("left_drive");
             v_motor_left_drive.setDirection(DcMotor.Direction.REVERSE);
@@ -43,7 +43,7 @@ public class Team_10363_Auto_Decs {
         }
         //If it doesn't work, set the motor to null and add record the problem in the Debug log.
         catch (Exception p_exception){
-            v_motor_left_drive=null;
+            v_motor_left_drive = null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         //Same as above for the right motor, but reversed
