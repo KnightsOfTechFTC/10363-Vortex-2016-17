@@ -28,9 +28,6 @@ public class Team10363AutoEmergency extends OpMode {
                 break;
             default:
                 break;
-
-
-
         }
     }
     int v_state=0;
