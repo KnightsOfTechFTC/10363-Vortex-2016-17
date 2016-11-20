@@ -67,7 +67,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         telemetry.addData("4: shooting speed: ",mode);
         if (gamepad2.x&&!x_press){
             x_press=true;
-            liftmode++;
+            shootingmode++;
         }
         if (!gamepad2.x) {
             x_press = false;
@@ -86,6 +86,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
     double leftPower;
     double rightPower;
     int liftmode=0;
+    int shootingmode = 0;
     double slow=1;
     boolean b_press;
     boolean y_press;
