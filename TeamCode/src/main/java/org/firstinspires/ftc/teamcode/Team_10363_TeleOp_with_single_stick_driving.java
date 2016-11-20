@@ -64,12 +64,12 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
             y_press=false;
         }
         RobertII.m_ball_shooting_power(mode); //This is the ball shooting modifier
-        telemetry.addData("4: shooting speed: ",mode);
-        if (gamepad2.x&&!x_press){
+        telemetry.addData("4: ball shooting speed: ",mode);
+        if (gamepad2.right_trigger>=.4){
             x_press=true;
             shootingmode++;
         }
-        if (!gamepad2.x) {
+        if (gamepad2.right_trigger<=.4) {
             x_press = false;
         }
         RobertII.m_lift_power(liftmode); //This is the ball life power modifier
