@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 /**
  * Created by Lego5 on 10/23/2016.
  */
+@Disabled
 @Autonomous(name="10363 Competition Autonomous on Blue Alliance (right beacon)")
 public class Team10363AutoBlueBeaconRight extends OpMode{
 
