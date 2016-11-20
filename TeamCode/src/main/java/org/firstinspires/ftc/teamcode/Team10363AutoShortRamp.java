@@ -4,25 +4,26 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 /**
- * Created by Lego3 on 11/11/2016.
+ * Created by Lucas on 11/11/2016.
  */
+
 @Autonomous(name = "10363 Competition Autonomous (emergency)")
-public class Team10363AutoEmergency extends OpMode {
-    Team_10363_Auto_Decs Rob=new Team_10363_Auto_Decs();
+public class Team10363AutoShortRamp extends OpMode {
+    Team_10363_Auto_Decs RobertII=new Team_10363_Auto_Decs();
     @Override
     public void init() {
-        Rob.init(hardwareMap);
+        RobertII.init(hardwareMap);
     }
 
     @Override
     public void loop() {
         switch (v_state) {
             case 0:
-                Rob.setDrivePower((float) (.5), (float) (.5));
-                if (Rob.have_drive_encoders_reached(left_encoder - 4700, right_encoder - 4700, false)) {
-                    Rob.setDrivePower(0, 0);
-                    left_encoder = Rob.a_left_encoder_pos();
-                    right_encoder = Rob.a_right_encoder_pos();
+                RobertII.setDrivePower((float) (.3), (float) (.3));
+                if (RobertII.have_drive_encoders_reached(left_encoder - 4700, right_encoder - 4700, false)) {
+                    RobertII.setDrivePower(0, 0);
+                    left_encoder = RobertII.a_left_encoder_pos();
+                    right_encoder = RobertII.a_right_encoder_pos();
                     v_state++;
                 }
                 break;
@@ -34,4 +35,5 @@ public class Team10363AutoEmergency extends OpMode {
     int v_state=0;
     int left_encoder=0;
     int right_encoder=0;
+
 }
