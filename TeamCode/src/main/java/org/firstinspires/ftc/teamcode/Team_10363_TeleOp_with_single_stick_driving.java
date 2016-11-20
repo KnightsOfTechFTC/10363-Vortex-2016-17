@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
- * Created by Lego5 on 10/16/2016.
+ * Created by Jacob on 10/16/2016.
  */
 @TeleOp(name = "10363 Competition TeleOp (with Single-Stick Driving")
 public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
@@ -42,7 +42,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         else if (gamepad1.dpad_down) {cap_updown = -1;}
         else {cap_updown=0;}
 
-        RobertII.m_cap_power(cap_updown);
+        RobertII.m_cap_power(cap_updown); //This is the cap lift modifier
 //        RobertII.m_cap_power(gamepad1.right_stick_y);
 
         if (gamepad1.x&&!x_press){
@@ -53,7 +53,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         if (!gamepad1.x){
             x_press=false;
         }
-        RobertII.m_intake_power(mode);
+        RobertII.m_intake_power(mode); //This is the intake modifier
         telemetry.addData("3: intake speed: ",mode);
         if (gamepad2.y&&!y_press){
             y_press=true;
@@ -63,7 +63,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         if (!gamepad2.y){
             y_press=false;
         }
-        RobertII.m_ball_shooting_power(mode);
+        RobertII.m_ball_shooting_power(mode); //This is the ball shooting modifier
         telemetry.addData("4: shooting speed: ",mode);
         if (gamepad2.x&&!x_press){
             x_press=true;
@@ -72,7 +72,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         if (!gamepad2.x) {
             x_press = false;
         }
-        RobertII.m_lift_power(liftmode);
+        RobertII.m_lift_power(liftmode); //This is the ball life power modifier
         telemetry.addData("5: lift speed: ",liftmode);
         if (gamepad1.a&&!a_press){
             a_press=true;
@@ -83,6 +83,7 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         }
         RobertII.press_or_reset_beacons(beacons);
     }
+    // Variable Declarations
     double leftPower;
     double rightPower;
     int liftmode=0;
