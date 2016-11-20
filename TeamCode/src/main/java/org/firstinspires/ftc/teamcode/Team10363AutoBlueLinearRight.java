@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -42,7 +43,7 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
 
         try{
             v_motor_left_drive= hardwareMap.dcMotor.get("left_drive");
-            v_motor_left_drive.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_left_drive.setDirection(DcMotor.Direction.FORWARD);
             v_motor_left_drive.setPower(0);
             v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -55,7 +56,7 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
         //Same as above for the right motor, but reversed
         try {
             v_motor_right_drive=hardwareMap.dcMotor.get("right_drive");
-            v_motor_right_drive.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_right_drive.setDirection(DcMotor.Direction.REVERSE);
             v_motor_right_drive.setPower(0);
             v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -152,12 +153,8 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        v_motor_left_drive.setTargetPosition(left_encoder-4220);
-        v_motor_right_drive.setTargetPosition(right_encoder-4220);
-        v_motor_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        v_motor_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         runtime.reset();
-        while (v_motor_right_drive.isBusy()&&v_motor_left_drive.isBusy()){
+        while (!have_drive_encoders_reached(left_encoder+4220,right_encoder+4220,true)){
             setDrivePower(-.8f,-.8f);
             telemetry.update();
             telemetry.addData("2: left encoder", a_left_encoder_pos());
@@ -194,12 +191,12 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
             right_encoder = a_right_encoder_pos();
         }
         setDrivePower(0,0);
-        v_motor_left_drive.setTargetPosition(left_encoder-10524);
-        v_motor_right_drive.setTargetPosition(right_encoder-10524);
+        v_motor_left_drive.setTargetPosition(left_encoder+10524);
+        v_motor_right_drive.setTargetPosition(right_encoder+10524);
         v_motor_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         v_motor_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         runtime.reset();
-        while (v_motor_right_drive.isBusy()&&v_motor_left_drive.isBusy()){
+        while (!have_drive_encoders_reached(left_encoder+10524,right_encoder+10524,true)){
             setDrivePower((float) (.3 - adjspeed(1, a_gyro_heading()-45)), (float) (.3 + adjspeed(1, a_gyro_heading()-45)));
             telemetry.update();
             telemetry.addData("2: left encoder", a_left_encoder_pos());
