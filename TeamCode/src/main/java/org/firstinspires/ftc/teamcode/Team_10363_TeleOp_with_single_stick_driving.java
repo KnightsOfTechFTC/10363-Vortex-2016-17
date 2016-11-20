@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name = "10363 Competition TeleOp (with Single-Stick Driving")
 public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
     /* RIP Robert the Robot 2015-2016. May his Res-Q skills be remembered by his 2 children,
-        Robert II (a temp name) and JVBot (also a temp name) and his lifelong friend 9924Bot.  */
+        Robert II (a temp name) and JVBot (also a temp name) and his lifelong friend 9924Bot. */
     Team_10363_TeleOp_Decs RobertII= new Team_10363_TeleOp_Decs();
     @Override
     public void init() {
@@ -55,16 +55,25 @@ public class Team_10363_TeleOp_with_single_stick_driving extends OpMode {
         }
         RobertII.m_intake_power(mode);
         telemetry.addData("3: intake speed: ",mode);
-        if (gamepad1.y&&!y_press){
+        if (gamepad2.y&&!y_press){
             y_press=true;
             liftmode++;
             if(liftmode==2){liftmode=-1;}
         }
-        if (!gamepad1.y){
+        if (!gamepad2.y){
             y_press=false;
         }
+        RobertII.m_ball_shooting_power(mode);
+        telemetry.addData("4: shooting speed: ",mode);
+        if (gamepad2.x&&!x_press){
+            x_press=true;
+            liftmode++;
+        }
+        if (!gamepad2.x) {
+            x_press = false;
+        }
         RobertII.m_lift_power(liftmode);
-        telemetry.addData("4: lift speed: ",liftmode);
+        telemetry.addData("5: lift speed: ",liftmode);
         if (gamepad1.a&&!a_press){
             a_press=true;
             beacons=!beacons;

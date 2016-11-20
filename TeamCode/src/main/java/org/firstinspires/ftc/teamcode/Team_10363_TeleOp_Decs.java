@@ -21,6 +21,7 @@ public class Team_10363_TeleOp_Decs {
     private DcMotor v_motor_lift;
     private DcMotor v_motor_cap_left;
     private DcMotor v_motor_cap_right;
+    private DcMotor v_motor_ball_shooter;
 
     //servos
     private Servo v_servo_left_beacon;
@@ -88,6 +89,18 @@ public class Team_10363_TeleOp_Decs {
         //If it doesn't work, set the motor to null and add record the problem in the Debug log.
         catch (Exception p_exception){
             v_motor_intake=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_motor_ball_shooter=ahwMap.dcMotor.get("ball_shooter");
+            v_motor_ball_shooter.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_ball_shooter.setPower(0);
+            v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_ball_shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        //If it doesn't work, set the motor to null and add record the problem in the Debug log.
+        catch (Exception p_exception){
+            v_motor_ball_shooter=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         try{
@@ -296,6 +309,12 @@ public class Team_10363_TeleOp_Decs {
         if (v_motor_intake!=null){
             float sendpower=Range.clip(power,-1,1);
             v_motor_intake.setPower(sendpower);
+        }
+    }
+    public void m_ball_shooting_power(float power){
+        if (v_motor_ball_shooter!=null){
+            float sendpower=Range.clip(power,-1,1);
+            v_motor_ball_shooter.setPower(sendpower);
         }
     }
      void press_or_reset_beacons(boolean press){
