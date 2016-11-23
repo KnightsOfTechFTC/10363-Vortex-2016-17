@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 /**
- * Created by Lego5 on 10/23/2016.
+ * Created by Jacob on 10/23/2016.
  */
 @Autonomous(name="10363 Competition Autonomous on Blue Alliance (right beacon) Linear")
 @Disabled

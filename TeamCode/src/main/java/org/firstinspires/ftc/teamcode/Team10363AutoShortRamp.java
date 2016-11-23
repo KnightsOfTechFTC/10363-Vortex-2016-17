@@ -18,7 +18,7 @@ public class Team10363AutoShortRamp extends OpMode {
     @Override
     public void loop() {
         switch (v_state) {
-            case 0:
+            case 0: //The first state
                 RobertII.setDrivePower((float) (.3), (float) (.3));
                 if (RobertII.have_drive_encoders_reached(left_encoder - 4700, right_encoder - 4700, false)) {
                     RobertII.setDrivePower(0, 0);
