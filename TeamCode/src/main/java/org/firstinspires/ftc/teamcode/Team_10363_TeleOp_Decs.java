@@ -314,7 +314,7 @@ public class Team_10363_TeleOp_Decs {
     public void m_ball_shooting_power(float power){
         if (v_motor_ball_shooter!=null){
             float sendpower=Range.clip(power,-1,1);
-            v_motor_ball_shooter.setPower(sendpower);
+            v_motor_ball_shooter.setPower(1);
         }
     }
      void press_or_reset_beacons(boolean press){
