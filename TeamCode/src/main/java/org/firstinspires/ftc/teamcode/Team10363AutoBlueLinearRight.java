@@ -153,69 +153,17 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        runtime.reset();
-        while (!have_drive_encoders_reached(left_encoder+4220,right_encoder+4220,true)){
-            setDrivePower(-.8f,-.8f);
-            telemetry.update();
-            telemetry.addData("2: left encoder", a_left_encoder_pos());
-            telemetry.addData("3: right encoder", a_right_encoder_pos());
-            telemetry.addData("4: Heading", a_gyro_heading());
-            telemetry.addData("5: Ground Color (Blue)", a_ground_blue());
-            telemetry.addData("6: Ground Color (Alpha)", a_ground_alpha());
-            telemetry.addData("7: Beacon Red", a_left_red());
-            telemetry.addData("8: Beacon Blue", a_left_blue());
-            telemetry.addData("9: last state left", left_encoder);
-            telemetry.addData("10: last state right", right_encoder);
-            telemetry.addData("11: actual left power", actual_left_power());
-            // Allow time for other processes to run.
-            idle();
-        }
-        setDrivePower(0,0);
+        encoderDrive(.5,18,18,5,-2);
         reset_drive_encoders();
         v_motor_left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         v_motor_right_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        setDrivePower((float) .4, 0);
-        while(a_gyro_heading() <= 32 || a_gyro_heading() > 90){
-            telemetry.update();
-            telemetry.addData("2: left encoder", a_left_encoder_pos());
-            telemetry.addData("3: right encoder", a_right_encoder_pos());
+        while (a_gyro_heading()>180&&a_gyro_heading()<315){
+            setDrivePower(.3f,-.3f);
             telemetry.addData("4: Heading", a_gyro_heading());
-            telemetry.addData("5: Ground Color (Blue)", a_ground_blue());
-            telemetry.addData("6: Ground Color (Alpha)", a_ground_alpha());
-            telemetry.addData("7: Beacon Red", a_left_red());
-            telemetry.addData("8: Beacon Blue", a_left_blue());
-            telemetry.addData("9: last state left", left_encoder);
-            telemetry.addData("10: last state right", right_encoder);
-            telemetry.addData("11: actual left power", actual_left_power());
-            left_encoder = a_left_encoder_pos();
-            right_encoder = a_right_encoder_pos();
-        }
-        setDrivePower(0,0);
-        v_motor_left_drive.setTargetPosition(left_encoder+10524);
-        v_motor_right_drive.setTargetPosition(right_encoder+10524);
-        v_motor_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        v_motor_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        runtime.reset();
-        while (!have_drive_encoders_reached(left_encoder+10524,right_encoder+10524,true)){
-            setDrivePower((float) (.3 - adjspeed(1, a_gyro_heading()-45)), (float) (.3 + adjspeed(1, a_gyro_heading()-45)));
             telemetry.update();
-            telemetry.addData("2: left encoder", a_left_encoder_pos());
-            telemetry.addData("3: right encoder", a_right_encoder_pos());
-            telemetry.addData("4: Heading", a_gyro_heading());
-            telemetry.addData("5: Ground Color (Blue)", a_ground_blue());
-            telemetry.addData("6: Ground Color (Alpha)", a_ground_alpha());
-            telemetry.addData("7: Beacon Red", a_left_red());
-            telemetry.addData("8: Beacon Blue", a_left_blue());
-            telemetry.addData("9: last state left", left_encoder);
-            telemetry.addData("10: last state right", right_encoder);
-            telemetry.addData("11: actual left power", actual_left_power());
-            // Allow time for other processes to run.
-            idle();
         }
-        setDrivePower(0,0);
-        reset_drive_encoders();
-        v_motor_left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        v_motor_right_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        encoderDrive(.5,40.67,40.67,5,315);
+
     }
 
     //methods
@@ -248,7 +196,7 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
 
     }
     //calculates adjspeed, the speed correction factor in straightDrive.
-    public double adjspeed(double speedModifier, int deltaAngle){
+        public double adjspeed(double speedModifier, int deltaAngle){
         return speedModifier*Math.sin(Math.toRadians(deltaAngle));
     }
     /* accesses the gyro's heading. If we can't find it, return an incorrect value that is divisible
@@ -364,6 +312,75 @@ public class Team10363AutoBlueLinearRight extends LinearOpMode {
             returnthis = LeftColor.red();
         }
         return returnthis;
+    }
+    public void encoderDrive(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS, int angleTarget) throws InterruptedException {
+        int newLeftTarget;
+        int newRightTarget;
+        double COUNTS_PER_INCH=2880/(3.54331*Math.PI);
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = v_motor_left_drive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = v_motor_right_drive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            v_motor_left_drive.setTargetPosition(newLeftTarget);
+            v_motor_right_drive.setTargetPosition(newRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            v_motor_left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            v_motor_right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            v_motor_left_drive.setPower(Math.abs(speed));
+            v_motor_right_drive.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (v_motor_left_drive.isBusy() && v_motor_right_drive.isBusy())) {
+                if (angleTarget>=0&&angleTarget<=360){
+                    double adjspeed=speed*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-angleTarget));
+                    v_motor_left_drive.setPower(Math.abs(speed)-adjspeed);
+                    v_motor_right_drive.setPower(Math.abs(speed)+adjspeed);
+                    telemetry.addData("1: adjspeed: " ,adjspeed);
+                }
+
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                        v_motor_left_drive.getCurrentPosition(),
+                        v_motor_right_drive.getCurrentPosition());
+                telemetry.addData("2: left encoder ", a_left_encoder_pos());
+                telemetry.addData("3: right encoder ", a_right_encoder_pos());
+                telemetry.addData("4: Heading ", a_gyro_heading());
+                telemetry.addData("5: Ground Color (Blue) ", a_ground_blue());
+                telemetry.addData("6: Ground Color (Alpha) ", a_ground_alpha());
+                telemetry.addData("7: Beacon Red ", a_left_red());
+                telemetry.addData("8: Beacon Blue ", a_left_blue());
+                telemetry.addData("9: last state left ", left_encoder);
+                telemetry.addData("10: last state right ", right_encoder);
+                telemetry.addData("11: actual left power ", actual_left_power());
+                telemetry.update();
+
+                // Allow time for other processes to run.
+                idle();
+            }
+
+            // Stop all motion;
+            v_motor_left_drive.setPower(0);
+            v_motor_right_drive.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            v_motor_left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            v_motor_right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
     }
 
 }
