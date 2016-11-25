@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -42,8 +43,8 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         try {
-            v_motor_left_drive = hardwareMap.dcMotor.get("left_drive");
-            v_motor_left_drive.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_left_drive = hardwareMap.dcMotor.get("right_drive");
+            v_motor_left_drive.setDirection(DcMotor.Direction.REVERSE);
             v_motor_left_drive.setPower(0);
             v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -55,8 +56,8 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         }
         //Same as above for the right motor, but reversed
         try {
-            v_motor_right_drive = hardwareMap.dcMotor.get("right_drive");
-            v_motor_right_drive.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_right_drive = hardwareMap.dcMotor.get("left_drive");
+            v_motor_right_drive.setDirection(DcMotor.Direction.FORWARD);
             v_motor_right_drive.setPower(0);
             v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -106,10 +107,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         if (SensorGyro != null) {
             SensorGyro.calibrate();
             while (SensorGyro.isCalibrating()) {
-                try {
-                    Thread.sleep(50);
-                } catch (Exception p_exception) {
-                }
+                Thread.sleep(50);
             }
         }
         //Try to add the color sensors
@@ -148,15 +146,39 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         }
         v_motor_right_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         v_motor_left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        timedrive(100,.5f,.5f,0);
-        timedrive(500,.5f, -.5f, 45);
+        timedrive(1000,.5f,.5f,-5);
+        while (opModeIsActive()&&(a_gyro_heading()<45 || a_gyro_heading()>180)){
+            telemetry.addData("-1: time driving",runtime.milliseconds());
+            double adjspeed=(.5+.5)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(.5-adjspeed);
+            v_motor_right_drive.setPower(-.5+adjspeed);
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("8: Beacon Red ", a_left_red());
+            telemetry.addData("9: Beacon Blue ", a_left_blue());
+            telemetry.addData("10: last state left ", left_encoder);
+            telemetry.addData("11: last state right ", right_encoder);
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            idle();
+        }
+        setDrivePower(0,0);
+        runtime.reset();
+        while (runtime.seconds()<1&&opModeIsActive()){
+            double adjspeed=(2)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
+            v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
+        }
         runtime.reset();
         while (a_ground_alpha()<7&&opModeIsActive()&&runtime.seconds()<2.5){
             telemetry.addData("-1: time driving",runtime.milliseconds());
             double adjspeed=(.5+.5)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
             telemetry.addData("2: adjspeed: " ,adjspeed);
-            v_motor_left_drive.setPower(.5-adjspeed);
-            v_motor_right_drive.setPower(.5+adjspeed);
+            v_motor_left_drive.setPower(Range.clip(.5-adjspeed,-1,1));
+            v_motor_right_drive.setPower(Range.clip(.5+adjspeed,-1,1));
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -171,10 +193,27 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             idle();
 
         }
-        timedrive(500,-.5f, .5f, 0);
-
-
-
+        setDrivePower(0,0);
+        runtime.reset();
+        while (runtime.seconds()<1&&opModeIsActive()){
+            double adjspeed=(2)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
+            v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
+        }
+        runtime.reset();
+        while (opModeIsActive()&&runtime.milliseconds()<2500){
+            if (a_ground_alpha()<8){
+                setDrivePower(0.2f,0.2f);}
+            else if (a_gyro_heading()>45){
+                setDrivePower(.2f,-.2f);
+            }
+            else if (a_gyro_heading()<45){
+                setDrivePower(-.2f,.2f);
+            }
+            else {setDrivePower(.1f,.1f);}
+        }
+        setDrivePower(0,0);
 
     }
 
