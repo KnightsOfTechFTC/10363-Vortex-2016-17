@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.text.method.Touch;
+
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,7 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -37,6 +41,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     ColorSensor GroundColor;
     ColorSensor LeftColor;
     ColorSensor RightColor;
+    OpticalDistanceSensor ODS;
 
     @Override
 
@@ -135,6 +140,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             DbgLog.msg(p_exception.getLocalizedMessage());
             RightColor = null;
         }
+
         left_encoder = a_left_encoder_pos();
         right_encoder = a_right_encoder_pos();
 
@@ -202,19 +208,32 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
         }
         runtime.reset();
-        while (opModeIsActive()&&runtime.milliseconds()<2500){
-            if (a_ground_alpha()<8){
-                setDrivePower(0.2f,0.2f);}
-            else if (a_gyro_heading()>45){
-                setDrivePower(.2f,-.2f);
-            }
-            else if (a_gyro_heading()<45){
-                setDrivePower(-.2f,.2f);
-            }
-            else {setDrivePower(.1f,.1f);}
+        while (opModeIsActive()&&(a_gyro_heading()<88 || a_gyro_heading()>180)){
+            telemetry.addData("-1: time driving",runtime.milliseconds());
+            double adjspeed=(.5+.5)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-90));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(.7-adjspeed);
+            v_motor_right_drive.setPower(.3+adjspeed);
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("8: Beacon Red ", a_left_red());
+            telemetry.addData("9: Beacon Blue ", a_left_blue());
+            telemetry.addData("10: last state left ", left_encoder);
+            telemetry.addData("11: last state right ", right_encoder);
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            idle();
         }
         setDrivePower(0,0);
-
+        runtime.reset();
+        while (runtime.seconds()<1&&opModeIsActive()){
+            double adjspeed=(2)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-90));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
+            v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
+        }
+        setDrivePower(0,0);
     }
 
 
