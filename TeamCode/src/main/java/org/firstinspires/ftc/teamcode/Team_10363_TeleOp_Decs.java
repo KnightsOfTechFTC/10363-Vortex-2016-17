@@ -95,7 +95,7 @@ public class Team_10363_TeleOp_Decs {
             v_motor_ball_shooter=ahwMap.dcMotor.get("ball_shooter");
             v_motor_ball_shooter.setDirection(DcMotor.Direction.FORWARD);
             v_motor_ball_shooter.setPower(0);
-            v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             v_motor_ball_shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         //If it doesn't work, set the motor to null and add record the problem in the Debug log.
