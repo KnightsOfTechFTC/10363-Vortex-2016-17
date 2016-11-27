@@ -93,10 +93,10 @@ public class Team_10363_TeleOp_Decs {
         }
         try{
             v_motor_ball_shooter=ahwMap.dcMotor.get("ball_shooter");
-            v_motor_ball_shooter.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_ball_shooter.setDirection(DcMotor.Direction.REVERSE);
             v_motor_ball_shooter.setPower(0);
             v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            v_motor_ball_shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            v_motor_ball_shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         //If it doesn't work, set the motor to null and add record the problem in the Debug log.
         catch (Exception p_exception){
@@ -313,8 +313,8 @@ public class Team_10363_TeleOp_Decs {
     }
     public void m_ball_shooting_power(float power){
         if (v_motor_ball_shooter!=null){
-            float sendpower=Range.clip(power,-1,1);
-            v_motor_ball_shooter.setPower(1);
+            float sendpower=(float)Range.clip(power,0,1);
+            v_motor_ball_shooter.setPower(sendpower);
         }
     }
      void press_or_reset_beacons(boolean press){

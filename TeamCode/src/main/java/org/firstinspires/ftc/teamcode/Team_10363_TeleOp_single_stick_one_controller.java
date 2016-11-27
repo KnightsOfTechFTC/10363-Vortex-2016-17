@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Team_10363_TeleOp_Decs;
 
@@ -81,15 +82,11 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
         if ((gamepad1.a&&!a_press)&&(gamepad2.a&&!a_press)){
             a_press=false;
         }
-        RobertII.m_ball_shooting_power(mode); //This is the ball shooting modifier
-        telemetry.addData("4: ball shooting speed: ",.8f*gamepad1.right_trigger);
-        if ((gamepad1.right_trigger>=.4)||(gamepad1.right_trigger>=.4)) {
-            ball_press = true;
-            RobertII.m_ball_shooting_power((.8f*gamepad1.right_trigger));
-        }
-        if ((gamepad1.right_trigger<.4)&&(gamepad2.right_trigger<=.4)){
-            ball_press=false;
-        }
+        if (gamepad1.right_trigger>gamepad2.right_trigger){
+            RobertII.m_ball_shooting_power(gamepad1.right_trigger);
+
+        }else {
+            RobertII.m_ball_shooting_power(gamepad2.right_trigger);}
         RobertII.press_or_reset_beacons(beacons);
     }
     // Variable Declarations
