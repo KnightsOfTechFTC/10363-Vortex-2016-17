@@ -23,12 +23,15 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
         //set motor powers using single-stick driving methods
         leftPower=RobertII.single_stick_drive_left(gamepad1.left_stick_x,gamepad1.left_stick_y);
         rightPower=RobertII.single_stick_drive_right(gamepad1.left_stick_x,gamepad1.left_stick_y);
-        if (gamepad1.b&&!b_press){
+        if ((gamepad1.b&&!b_press)||(gamepad2.b&&!b_press)){
             b_press=true;
             slow=slow+.6;
             if (slow>1){slow=.4;}
         }
-        if (!gamepad1.b){
+        if((gamepad1.b&&!b_press)&&(gamepad2.b&&!b_press)){
+            b_press=false;
+        }
+        if (!gamepad1.b&&!gamepad2.b){
             b_press=false;
         }
         RobertII.setDrivePowerWithCorrection((float) (rightPower*slow), (float) (leftPower*slow));
@@ -44,42 +47,48 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
         RobertII.m_cap_power(cap_updown); //This is the cap lift modifier
 //        RobertII.m_cap_power(gamepad1.right_stick_y);
 
-        if (gamepad1.x&&!x_press){
+        if ((gamepad1.b&&!b_press)||(gamepad2.b&&!b_press)){
             x_press=true;
             mode++;
             if(mode==2){mode=-1;}
         }
+        if((gamepad1.x&&!x_press)&&(gamepad2.x&&!x_press)){
+            x_press=false;
+        }
         if (!gamepad1.x){
             x_press=false;
         }
+
         RobertII.m_intake_power(mode); //This is the intake modifier
         telemetry.addData("3: intake speed: ",mode);
-        if (gamepad1.y&&!y_press){
+        if ((gamepad1.y&&!y_press)||(gamepad2.y&&!y_press)){
             y_press=true;
             liftmode++;
             if(liftmode==2){liftmode=-1;}
         }
+        if ((gamepad1.x&&!x_press)&&(gamepad2.x&&!x_press)){
+            y_press=false;
+        }
         if (!gamepad1.y){
             y_press=false;
         }
-        RobertII.m_ball_shooting_power(mode); //This is the ball shooting modifier
-        telemetry.addData("4: ball shooting speed: ",mode);
-        if (gamepad1.right_trigger>=.4){
-            ball_press=true;
-            shootingmode++;
-            if (shootingmode>1){shootingmode=0;}
-        }
-        if (gamepad1.right_trigger<=.4) {
-            ball_press = false;
-        }
         RobertII.m_lift_power(liftmode); //This is the ball life power modifier
         telemetry.addData("5: lift speed: ",liftmode);
-        if (gamepad1.a&&!a_press){
+        if ((gamepad1.a&&!a_press)||(gamepad2.a&&!a_press)){
             a_press=true;
             beacons=!beacons;
         }
-        if (!gamepad1.a){
+        if ((gamepad1.a&&!a_press)&&(gamepad2.a&&!a_press)){
             a_press=false;
+        }
+        RobertII.m_ball_shooting_power(mode); //This is the ball shooting modifier
+        telemetry.addData("4: ball shooting speed: ",.8f*gamepad1.right_trigger);
+        if ((gamepad1.right_trigger>=.4)||(gamepad1.right_trigger>=.4)) {
+            ball_press = true;
+            RobertII.m_ball_shooting_power((.8f*gamepad1.right_trigger));
+        }
+        if ((gamepad1.right_trigger<.4)&&(gamepad2.right_trigger<=.4)){
+            ball_press=false;
         }
         RobertII.press_or_reset_beacons(beacons);
     }
