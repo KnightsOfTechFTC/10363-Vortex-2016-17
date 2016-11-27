@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Team_10363_TeleOp_Decs;
 
-@TeleOp(name = "10363 Competition TeleOp (with Single-Stick Driving")
+@TeleOp(name = "10363 Competition TeleOp (with Single-Stick Driving)")
 public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
     /* RIP Robert the Robot 2015-2016. May his Res-Q skills be remembered by his 2 children,
         Robert II (a temp name) and JVBot (also a temp name) and his lifelong friend 9924Bot. */
