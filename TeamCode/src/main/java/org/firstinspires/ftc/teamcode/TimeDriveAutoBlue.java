@@ -207,6 +207,14 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         setDrivePower(0, 0);
         gyrohold(1000,90);
         timedrive(500, .3f, .3f, 90);
+        runtime.reset();
+        while (runtime.seconds()<2){
+            setDrivePower(0,0);
+            v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
+        v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gyrohold(2000,180);
         setDrivePower(0,0);
         /*
@@ -228,7 +236,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
                 press beacons;
             }
             if(addTime){
-                millel=millel+runtime.milleseconds();
+                millel=millel+runtime.milliseconds();
             }
 
         }
@@ -301,7 +309,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     public void gyroturn(int targetheading, int error)throws InterruptedException{
         runtime.reset();
         while((a_gyro_heading()<targetheading-error||a_gyro_heading()>targetheading+error)&&opModeIsActive()){
-            double adjspeed=(1.75)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
+            double adjspeed=(1.6)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
