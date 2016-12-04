@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by Lego5 on 11/23/2016.
  */
-@Autonomous(name = "timetest")
+@Autonomous(name = "blue auto both beacons")
 public class TimeDriveAutoBlue extends LinearOpMode {
     //Officially, our robot's name is Shartzmugel (votes for: @Lukcio, @Wonnie123, votes against: @jlevine18)
     /* RIP Robert the Robot 2015-2016. May his Res-Q skills be remembered by his 2 children,
@@ -33,6 +33,8 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     DcMotor v_motor_left_drive;
     DcMotor v_motor_right_drive;
     DcMotor v_motor_intake;
+    DcMotor v_motor_ball_shooter;
+    DcMotor v_motor_lift;
     //servos
     Servo v_servo_left_beacon;
     Servo v_servo_right_beacon;
@@ -124,6 +126,30 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             DbgLog.msg(p_exception.getLocalizedMessage());
             GroundColor = null;
         }
+        try{
+            v_motor_ball_shooter=hardwareMap.dcMotor.get("ball_shooter");
+            v_motor_ball_shooter.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_ball_shooter.setPower(0);
+            v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            v_motor_ball_shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        //If it doesn't work, set the motor to null and add record the problem in the Debug log.
+        catch (Exception p_exception){
+            v_motor_ball_shooter=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_motor_lift=hardwareMap.dcMotor.get("lift");
+            v_motor_lift.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_lift.setPower(0);
+            v_motor_lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            v_motor_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        //If it doesn't work, set the motor to null and add record the problem in the Debug log.
+        catch (Exception p_exception){
+            v_motor_lift=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
         try {
             LeftColor = hardwareMap.colorSensor.get("left-color");
             LeftColor.setI2cAddress(I2cAddr.create8bit(0x42));
@@ -181,8 +207,45 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         setDrivePower(0, 0);
         gyrohold(1000,90);
         timedrive(500, .3f, .3f, 90);
-        gyrohold(2000,0);
+        gyrohold(2000,180);
         setDrivePower(0,0);
+        /*
+        int millel=0;
+        while (millel<3000){
+            runtime.reset;
+            boolean addTime=true;
+           telemetry.addData("0: target heading",0);
+            telemetry.addData("1: actual heading",a_gyro_heading());
+            double adjspeed=(1.75)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-0));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
+                v_motor_left_drive.setPower(Range.clip(.3-adjspeed,-1,1));
+                v_motor_right_drive.setPower(Range.clip(.3+adjspeed,-1,1));
+            }
+            if (sees blue){
+                setDrivePower(0,0);
+                addTime=false;
+                press beacons;
+            }
+            if(addTime){
+                millel=millel+runtime.milleseconds();
+            }
+
+        }
+        gyroturn(315,5);
+        gyrohold(1000,315);
+        if (v_motor_ball_shooter!=null&&v_motor_lift!=null){
+            v_motor_ball_shooter.setPower(1);
+            timedrive(2000, -.5,-,.5,315)
+            gyrohold(2000,315);
+            v_motor_lift.setPower(1);
+            gyrohold(100,315);
+            v_motor_lift.setPower(0);
+            v_motor_ball_shooter.setPower(1);
+        }
+        timedrive(500,-.3,-.3,315);
+         */
+
 
     }
 
