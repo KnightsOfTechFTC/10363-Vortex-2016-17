@@ -217,7 +217,9 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gyrohold(2000,180);
         setDrivePower(0,0);
-        /*
+        //here
+
+
         int millel=0;
         while (millel<3000){
             runtime.reset;
@@ -252,7 +254,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             v_motor_ball_shooter.setPower(1);
         }
         timedrive(500,-.3,-.3,315);
-         */
+
 
 
     }
