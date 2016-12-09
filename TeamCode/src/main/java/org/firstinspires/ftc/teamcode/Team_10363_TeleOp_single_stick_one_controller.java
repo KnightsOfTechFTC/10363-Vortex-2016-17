@@ -67,8 +67,13 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
             liftmode++;
             if(liftmode==2){liftmode=-1;}
         }
-        if ((gamepad1.x&&!x_press)&&(gamepad2.x&&!x_press)){
-            y_press=false;
+        if (gamepad1.x&&!x_press){
+            x_press=true;
+            mode++;
+            if(mode==2){mode=-1;}
+        }
+        if (!gamepad1.x){
+            x_press=false;
         }
         if (!gamepad1.y){
             y_press=false;
