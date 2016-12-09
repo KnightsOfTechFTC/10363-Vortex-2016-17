@@ -295,9 +295,9 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         /*
 
 
-        int millel=0;
+        double millel=0;
         while (millel<3000){
-            runtime.reset;
+            runtime.reset();
             boolean addTime=true;
            telemetry.addData("0: target heading",0);
             telemetry.addData("1: actual heading",a_gyro_heading());
@@ -311,6 +311,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
                 setDrivePower(0,0);
                 addTime=false;
                 press beacons;
+
             }
             if(addTime){
                 millel=millel+runtime.milliseconds();
@@ -321,7 +322,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         gyrohold(1000,315);
         if (v_motor_ball_shooter!=null&&v_motor_lift!=null){
             v_motor_ball_shooter.setPower(1);
-            timedrive(2000, -.5,-,.5,315)
+            timedrive(2000, -.5,-.5,315)
             gyrohold(2000,315);
             v_motor_lift.setPower(1);
             gyrohold(100,315);
@@ -402,7 +403,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         }
     }
 
-    public void timedrive(int mills, float speedleft, float speedright, int targetheading) throws InterruptedException{
+    public void timedrive(int mills, double speedleft, double speedright, int targetheading) throws InterruptedException{
         runtime.reset();
         while (opModeIsActive() && runtime.milliseconds()<mills) {
                 telemetry.addData("-1: time driving",runtime.milliseconds());

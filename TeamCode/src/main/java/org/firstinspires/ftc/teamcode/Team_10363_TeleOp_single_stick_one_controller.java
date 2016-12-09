@@ -87,12 +87,24 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
         if ((gamepad1.a&&!a_press)&&(gamepad2.a&&!a_press)){
             a_press=false;
         }
+//      if ((gamepad1.dpad_right&&!dpad_right)||(gamepad2.dpad_right&&!dpad_right)){
+        if ((gamepad1.dpad_right)||(gamepad2.dpad_right)){
+            beacon1=true;
+        }
+//        if ((gamepad1.dpad_right&&!dpad_right)&&(gamepad2.dpad_right&&!dpad_right)){
+        if ((!gamepad1.dpad_right)&&(!gamepad2.dpad_right)){
+            beacon1=false;
+            telemetry.addData("Tube Beacon Status: ", beacon1);
+
+        }
         if (gamepad1.right_trigger>gamepad2.right_trigger){
             RobertII.m_ball_shooting_power(gamepad1.right_trigger);
 
         }else {
-            RobertII.m_ball_shooting_power(gamepad2.right_trigger);}
+            RobertII.m_ball_shooting_power(gamepad2.right_trigger);
+        }
         RobertII.press_or_reset_beacons(beacons);
+        RobertII.beacon_sweep(beacon1);
     }
     // Variable Declarations
     double leftPower;
@@ -103,6 +115,8 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
     boolean b_press;
     boolean y_press;
     boolean beacons;
+    boolean beacon1;
+    boolean dpad_right;
     boolean a_press;
     int mode=0;
     boolean x_press;

@@ -26,6 +26,8 @@ public class Team_10363_TeleOp_Decs {
     //servos
     private Servo v_servo_left_beacon;
     private Servo v_servo_right_beacon;
+    private Servo v_right_beacon_tube;
+    private Servo v_left_beacon_tube;
 
     //sensors
     private GyroSensor SensorGyro;
@@ -103,6 +105,7 @@ public class Team_10363_TeleOp_Decs {
             v_motor_ball_shooter=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
+
         try{
             v_servo_left_beacon=ahwMap.servo.get("left beacon");
             v_servo_left_beacon.setDirection(Servo.Direction.FORWARD);
@@ -120,6 +123,25 @@ public class Team_10363_TeleOp_Decs {
         }
         catch (Exception p_exception){
             v_servo_right_beacon=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+
+        try{
+            v_right_beacon_tube=ahwMap.servo.get("right_beacon_sweep");
+            v_right_beacon_tube.setDirection(Servo.Direction.FORWARD);
+            v_right_beacon_tube.setPosition(0);
+        }
+        catch (Exception p_exception){
+            v_right_beacon_tube=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try{
+            v_left_beacon_tube=ahwMap.servo.get("left_beacon_sweep");
+            v_left_beacon_tube.setDirection(Servo.Direction.REVERSE);
+            v_left_beacon_tube.setPosition(0);
+        }
+        catch (Exception p_exception){
+            v_left_beacon_tube=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         try{
@@ -327,5 +349,12 @@ public class Team_10363_TeleOp_Decs {
             v_servo_right_beacon.setPosition(.35);
         }
     }
-
+    public void beacon_sweep(boolean press1){
+        if (press1){
+            v_right_beacon_tube.setPosition(.7);
+        }
+        else {
+            v_right_beacon_tube.setPosition(0);
+        }
+    }
 }

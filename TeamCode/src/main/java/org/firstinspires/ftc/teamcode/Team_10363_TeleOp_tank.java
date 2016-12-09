@@ -71,6 +71,11 @@ public class Team_10363_TeleOp_tank extends OpMode {
         if (!gamepad1.a){
             a_press=false;
         }
+        if (gamepad1.right_trigger>gamepad2.right_trigger){
+            RobertII.m_ball_shooting_power(gamepad1.right_trigger);
+
+        }else {
+            RobertII.m_ball_shooting_power(gamepad2.right_trigger);}
         RobertII.press_or_reset_beacons(beacons);
     }
     double leftPower;
