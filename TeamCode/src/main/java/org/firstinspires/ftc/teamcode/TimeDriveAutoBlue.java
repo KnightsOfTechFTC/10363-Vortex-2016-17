@@ -160,7 +160,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         }
         try {
             FrontColor = hardwareMap.colorSensor.get("front-color");
-            FrontColor.setI2cAddress(I2cAddr.create8bit(0x44));
+            FrontColor.setI2cAddress(I2cAddr.create8bit(0x46));
             FrontColor.enableLed(false);
         } catch (Exception p_exception) {
             DbgLog.msg(p_exception.getLocalizedMessage());
@@ -178,7 +178,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             }else{
                 telemetry.addData("front color not inited",0);
             }
-            telemetry.addData("this is the newest version",1000);
+            telemetry.addData("this is the newest version",0);
 
             telemetry.update();
             idle();
@@ -209,39 +209,105 @@ public class TimeDriveAutoBlue extends LinearOpMode {
 
         }
         timedrive(500,.5,.5,45);
-        gyroturn(270, 5);
-        setDrivePower(0, 0);
+        gyroturn(270, 20);
+        timedrive(400,.5,.5,270);
+        gyroturn(270,6);
         gyrohold(1000,270);
-        setDrivePower(0,0);
-        if (FrontColor!=null){
-            while ((!(FrontColor.blue()>2&&FrontColor.red()<2)||!(FrontColor.blue()>2&&FrontColor.red()<2))&&opModeIsActive()){
-                setDrivePower(-.3f,-.3f);
-                telemetry.addData("5: Heading ", a_gyro_heading());
-                telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
-                telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
-                telemetry.addData("8: Beacon Red ", a_left_red());
-                telemetry.addData("9: Beacon Blue ", a_left_blue());
-                telemetry.addData("10: last state left ", left_encoder);
-                telemetry.addData("11: last state right ", right_encoder);
-                telemetry.addData("12: actual left power ", actual_left_power());
-                idle();
-            }
-            setDrivePower(0,0);
-            if (FrontColor.blue()>2&&FrontColor.red()<2){
-                gyroturn(60,5);
-                timedrive(1000,-.3f,-.3f,60);
-                timedrive(1000,0,0,60);
-                timedrive(1500,.3f,.3f,60);
-                gyroturn(0,5);
-            }else{
-                gyroturn(120,5);
-                timedrive(1000,-.3f,-.3f,120);
-                timedrive(1000,0,0,120);
-                timedrive(1500,.3f,.3f,120);
-                gyroturn(0,5);
-            }
+        setDrivePower(0, 0);
+        if (FrontColor!=null) {
+            timedrive(2700, -.2, -.2, 90);
+            setDrivePower(0, 0);
             runtime.reset();
-            while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
+            while (runtime.seconds() < 1) {
+            }
+            if (FrontColor.red() > 2) {
+                timedrive(500, .2, .2, 90);
+                runtime.reset();
+                gyrohold(5000,90);
+                timedrive(1000, -.2, -.2, 90);
+                setDrivePower(0,0);
+                timedrive(2000, .2, .2, 90);
+                setDrivePower(0,0);
+            } else if (FrontColor.blue()>2){
+                timedrive(2000, .2, .2, 90);
+                while (runtime.seconds() < 1.5) {
+                    telemetry.addData("blue", 2);
+                }
+            } else {
+                timedrive(500,.2,.2,90);
+                setDrivePower(0,0);
+                runtime.reset();
+                while (runtime.seconds()<1){
+                    telemetry.addData("neither",0);
+                    telemetry.update();
+                }
+                runtime.reset();
+                while (opModeIsActive()&&FrontColor.red()<2&&FrontColor.blue()<2&&runtime.seconds()<1.2){
+                    setDrivePower(.3f,-.3f);
+                }
+                setDrivePower(0,0);
+                if (FrontColor.red()>2){
+                    timedrive(700,-.2,-.2,90);
+                    timedrive(2000,.2,.2,90);
+                }else {
+                    timedrive(1500,.2,.2,90);
+                }
+            }
+            gyroturn(180, 10);
+            setDrivePower(0,0);
+            runtime.reset();
+            timedrive(3000,.3,.3,180);
+        }
+        /*runtime.reset();
+        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
+            telemetry.addData("-1: time driving", runtime.milliseconds());
+            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (a_gyro_heading() - 45));
+            telemetry.addData("2: adjspeed: ", adjspeed);
+            v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
+            v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("8: Beacon Red ", a_left_red());
+            telemetry.addData("9: Beacon Blue ", a_left_blue());
+            telemetry.addData("10: last state left ", left_encoder);
+            telemetry.addData("11: last state right ", right_encoder);
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            idle();
+
+        }
+        timedrive(1000,.5,.5,15);
+        gyroturn(270, 20);
+        timedrive(400,.5,.5,270);
+        gyroturn(270,5);
+        gyrohold(1000,270);
+        setDrivePower(0, 0);
+        if (FrontColor!=null) {
+            timedrive(2700, -.2, -.2, 90);
+            setDrivePower(0, 0);
+            runtime.reset();
+            while (runtime.seconds() < 1) {
+            }
+            if (FrontColor.red() > 2) {
+                timedrive(2000, .2, .2, 90);
+                runtime.reset();
+                while (runtime.seconds() < 1.5) {
+                    telemetry.addData("red", 2);
+                }
+                timedrive(2000, -.2, -.2, 90);
+                timedrive(2000, .2, .2, 90);
+            } else {
+                timedrive(2000, .2, .2, 90);
+                while (runtime.seconds() < 1.5) {
+                    telemetry.addData("blue", 2);
+                }
+            }
+            gyroturn(15, 10);
+
+            runtime.reset();
+        }
+  /*          while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
                 telemetry.addData("-1: time driving", runtime.milliseconds());
                 double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (a_gyro_heading()));
                 telemetry.addData("2: adjspeed: ", adjspeed);
@@ -300,7 +366,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
                 v_motor_ball_shooter.setPower(1);
             }
             timedrive(500, -.3f, -.3f, 315);
-        }
+    */
 
         /*
 
@@ -381,7 +447,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         while (runtime.milliseconds()<mills&&opModeIsActive()){
             telemetry.addData("0: target heading",targetheading);
             telemetry.addData("1: actual heading",a_gyro_heading());
-            double adjspeed=(1.75)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
+            double adjspeed=(1.65)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
@@ -397,7 +463,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     public void gyroturn(int targetheading, int error)throws InterruptedException{
         runtime.reset();
         while((a_gyro_heading()<targetheading-error||a_gyro_heading()>targetheading+error)&&opModeIsActive()){
-            double adjspeed=(2)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
+            double adjspeed=(2.2)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
@@ -442,6 +508,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             // Allow time for other processes to run.
             idle();
         }
+        setDrivePower(0,0);
     }
 
     //methods
