@@ -41,8 +41,8 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     //sensors
     GyroSensor SensorGyro;
     ColorSensor GroundColor;
-    ColorSensor LeftColor;
-    ColorSensor RightColor;
+    ColorSensor SideColor;
+    ColorSensor FrontColor;
     OpticalDistanceSensor ODS;
 
     @Override
@@ -151,20 +151,20 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         try {
-            LeftColor = hardwareMap.colorSensor.get("left-color");
-            LeftColor.setI2cAddress(I2cAddr.create8bit(0x42));
-            LeftColor.enableLed(false);
+            SideColor = hardwareMap.colorSensor.get("side-color");
+            SideColor.setI2cAddress(I2cAddr.create8bit(0x44));
+            SideColor.enableLed(false);
         } catch (Exception p_exception) {
             DbgLog.msg(p_exception.getLocalizedMessage());
-            LeftColor = null;
+            SideColor = null;
         }
         try {
-            RightColor = hardwareMap.colorSensor.get("right-color");
-            RightColor.setI2cAddress(I2cAddr.create8bit(0x44));
-            RightColor.enableLed(false);
+            FrontColor = hardwareMap.colorSensor.get("front-color");
+            FrontColor.setI2cAddress(I2cAddr.create8bit(0x42));
+            FrontColor.enableLed(false);
         } catch (Exception p_exception) {
             DbgLog.msg(p_exception.getLocalizedMessage());
-            RightColor = null;
+            FrontColor = null;
         }
 
         left_encoder = a_left_encoder_pos();
@@ -207,7 +207,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         setDrivePower(0, 0);
         gyrohold(1000,90);
         setDrivePower(0,0);
-        while ((!(RightColor.blue()>2&&RightColor.red()<2)||!(RightColor.blue()>2&&RightColor.red()<2))&&opModeIsActive()){
+        while ((!(FrontColor.blue()>2&&FrontColor.red()<2)||!(FrontColor.blue()>2&&FrontColor.red()<2))&&opModeIsActive()){
             setDrivePower(-.3f,-.3f);
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
@@ -220,7 +220,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             idle();
         }
         setDrivePower(0,0);
-        if (RightColor.blue()>2&&RightColor.red()<2){
+        if (FrontColor.blue()>2&&FrontColor.red()<2){
             gyroturn(60,5);
             timedrive(1000,-.3f,-.3f,60);
             timedrive(1000,0,0,60);
@@ -254,7 +254,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         }
         gyroturn(90,5);
         runtime.reset();
-        while ((!(RightColor.blue()>2&&RightColor.red()<2)||!(RightColor.blue()>2&&RightColor.red()<2))&&opModeIsActive()) {
+        while ((!(FrontColor.blue()>2&&FrontColor.red()<2)||!(FrontColor.blue()>2&&FrontColor.red()<2))&&opModeIsActive()) {
             setDrivePower(-.3f, -.3f);
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
@@ -266,7 +266,7 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             telemetry.addData("12: actual left power ", actual_left_power());
             idle();
         }
-        if (RightColor.blue()>2&&RightColor.red()<2){
+        if (FrontColor.blue()>2&&FrontColor.red()<2){
             gyroturn(60,5);
             timedrive(1000,-.3f,-.3f,60);
             timedrive(1000,0,0,60);
@@ -568,15 +568,15 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     }
     public double a_left_blue(){
         double returnthis = -1;
-        if (LeftColor != null) {
-            returnthis = LeftColor.blue();
+        if (SideColor != null) {
+            returnthis = SideColor.blue();
         }
         return returnthis;
     }
     public double a_left_red(){
         double returnthis = -1;
-        if (LeftColor != null) {
-            returnthis = LeftColor.red();
+        if (SideColor != null) {
+            returnthis = SideColor.red();
         }
         return returnthis;
     }
