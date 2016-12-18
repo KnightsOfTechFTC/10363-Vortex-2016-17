@@ -99,6 +99,7 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
         }
         if (gamepad1.right_trigger>gamepad2.right_trigger){
             RobertII.m_ball_shooting_power(gamepad1.right_trigger);
+            telemetry.addData("Ball shooting Power",gamepad1.right_trigger);
 
         }else {
             RobertII.m_ball_shooting_power(gamepad2.right_trigger);
