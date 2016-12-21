@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,6 +17,7 @@ import com.qualcomm.robotcore.util.Range;
  * Created by Lego5 on 12/9/2016.
  */
 @Autonomous(name = "auto red both beacons")
+@Disabled
 public class TestingAutoRed extends LinearOpMode {
     //Officially, our robot's name is Shartzmugel (votes for: @Lukcio, @Wonnie123, votes against: @jlevine18)
     /* RIP Robert the Robot 2015-2016. May his Res-Q skills be remembered by his 2 children,

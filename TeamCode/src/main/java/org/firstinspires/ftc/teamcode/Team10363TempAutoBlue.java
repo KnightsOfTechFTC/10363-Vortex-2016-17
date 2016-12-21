@@ -170,7 +170,6 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             }else{
                 telemetry.addData("front color not inited",0);
             }
-            telemetry.addData("this is the newest version",0);
 
             telemetry.update();
             idle();
@@ -179,36 +178,80 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         v_motor_left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         timedrive(1000, .5f, .5f, -5);
         gyroturn(45, 11);
-        gyrohold(1000,45);
+        gyrohold(1000,45,1.65);
         setDrivePower(0, 0);
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
+        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
-            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (a_gyro_heading() - 45));
+            double veryTempGyro= a_gyro_heading();
+            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro - 45));
             telemetry.addData("2: adjspeed: ", adjspeed);
             v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
             v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
-            telemetry.addData("5: Heading ", a_gyro_heading());
-            telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
+            telemetry.addData("5: Heading ", veryTempGyro);
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
-            telemetry.addData("8: Beacon Red ", a_left_red());
-            telemetry.addData("9: Beacon Blue ", a_left_blue());
-            telemetry.addData("10: last state left ", left_encoder);
-            telemetry.addData("11: last state right ", right_encoder);
-            telemetry.addData("12: actual left power ", actual_left_power());
             telemetry.update();
             idle();
 
         }
         setDrivePower(0,0);
+        timedrive(500,.3f,.3f,45);
+        setDrivePower(.45f,-.45f);
         runtime.reset();
-        while (runtime.seconds()<1&&opModeIsActive()){
-            if (a_ground_alpha()>8){
-                setDrivePower(0.2f,0.2f);}
-            else if (a_gyro_heading()>90){setDrivePower(0,.2f);}
-            else if (a_gyro_heading()<90){setDrivePower(.2f,0);}
-            else {setDrivePower(.2f,.2f);}
+        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+            telemetry.addData("-1: time driving", runtime.milliseconds());
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            idle();}
+        runtime.reset();
+        timedrive(500,.3f,.3f,90);
+        gyrohold(800,90,2.5);
+        runtime.reset();
+        while (runtime.milliseconds()<=600){
+                setDrivePower(.2f,.6f);
         }
+        setDrivePower(0,0);
+        gyrohold(1000,90,0);
+        timedrive(1500,-.3f,-.3f,90);
+        gyroturn(0,20);
+        gyrohold(800,0,1);
+        double tempColor=0;
+        while (tempColor < 7 && opModeIsActive() && runtime.seconds() < 5) {
+            telemetry.addData("-1: time driving", runtime.milliseconds());
+            tempColor=a_ground_alpha();
+            double veryTempGyro= a_gyro_heading();
+            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro - 45));
+            telemetry.addData("2: adjspeed: ", adjspeed);
+            v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
+            v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
+            telemetry.addData("5: Heading ", veryTempGyro);
+            telemetry.addData("7: Ground Color (Alpha) ", tempColor);
+            telemetry.update();
+            idle();
+
+        }
+        setDrivePower(0,0);
+        timedrive(500,.3f,.3f,45);
+        setDrivePower(.45f,-.45f);
+        runtime.reset();
+        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+            telemetry.addData("-1: time driving", runtime.milliseconds());
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            idle();}
+        runtime.reset();
+        timedrive(500,.3f,.3f,90);
+        gyrohold(800,90,2.5);
+        runtime.reset();
+        while (runtime.milliseconds()<=600){
+            setDrivePower(.2f,.6f);
+        }
+        setDrivePower(0,0);
+        gyrohold(1000,90,0);
         /*runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
@@ -393,12 +436,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
 
 
-    public void gyrohold(int mills, int targetheading)throws InterruptedException{
+    public void gyrohold(int mills, int targetheading,double spmod)throws InterruptedException{
         runtime.reset();
         while (runtime.milliseconds()<mills&&opModeIsActive()){
             telemetry.addData("0: target heading",targetheading);
             telemetry.addData("1: actual heading",a_gyro_heading());
-            double adjspeed=(1.65)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
+            double adjspeed=(spmod)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
@@ -413,15 +456,17 @@ public class Team10363TempAutoBlue extends LinearOpMode {
     }
     public void gyroturn(int targetheading, int error)throws InterruptedException{
         runtime.reset();
-        while((a_gyro_heading()<targetheading-error||a_gyro_heading()>targetheading+error)&&opModeIsActive()){
-            double adjspeed=(2.2)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
+        double tempGyro=999999;
+        while((tempGyro<targetheading-error|tempGyro>targetheading+error)&&opModeIsActive()){
+            tempGyro=a_gyro_heading();
+            double adjspeed=(2.2)*Math.sin(((2*Math.PI)/360)*(tempGyro-targetheading));
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
                 v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
             }
             telemetry.addData("0: target heading",targetheading);
-            telemetry.addData("1: actual heading",a_gyro_heading());
+            telemetry.addData("1: actual heading",tempGyro);
             telemetry.addData("3: time passed (ms)", runtime.milliseconds());
             telemetry.addData("4: error range", error);
             telemetry.update();
@@ -429,6 +474,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
             idle();
         }
+        setDrivePower(0,0);
     }
 
     public void timedrive(int mills, double speedleft, double speedright, int targetheading) throws InterruptedException{
