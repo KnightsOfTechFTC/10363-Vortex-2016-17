@@ -48,7 +48,7 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
  *
  */
 @Autonomous(name = "color sensor test")
-@Disabled
+
 public class MRRGBExample extends LinearOpMode {
 
     ColorSensor sensorRGB;

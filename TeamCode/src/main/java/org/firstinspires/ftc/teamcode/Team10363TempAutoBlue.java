@@ -1,32 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.text.method.Touch;
-
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Created by Lego5 on 11/23/2016.
+ * Created by Lego5 on 12/21/2016.
  */
-@Autonomous(name = "blue auto both beacons")
-@Disabled
-public class TimeDriveAutoBlue extends LinearOpMode {
-    //Officially, our robot's name is Shartzmugel (votes for: @Lukcio, @Wonnie123, votes against: @jlevine18)
-    /* RIP Robert the Robot 2015-2016. May his Res-Q skills be remembered by his 2 children,
-        Shartzmugel and JVBot (a temp name) and his lifelong friend 9924Bot.  */
-    //time
+@Autonomous(name = "10363 Auto on Blue")
+public class Team10363TempAutoBlue extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //ints
     int left_encoder;
@@ -210,55 +200,14 @@ public class TimeDriveAutoBlue extends LinearOpMode {
             idle();
 
         }
-        timedrive(500,.5,.5,45);
-        gyroturn(270, 20);
-        timedrive(400,.5,.5,270);
-        gyroturn(270,6);
-        gyrohold(1000,270);
-        setDrivePower(0, 0);
-        if (FrontColor!=null) {
-            timedrive(2700, -.2, -.2, 90);
-            setDrivePower(0, 0);
-            runtime.reset();
-            while (runtime.seconds() < 1) {
-            }
-            if (FrontColor.red() > 2) {
-                timedrive(500, .2, .2, 90);
-                runtime.reset();
-                gyrohold(5000,90);
-                timedrive(1000, -.2, -.2, 90);
-                setDrivePower(0,0);
-                timedrive(2000, .2, .2, 90);
-                setDrivePower(0,0);
-            } else if (FrontColor.blue()>2){
-                timedrive(2000, .2, .2, 90);
-                while (runtime.seconds() < 1.5) {
-                    telemetry.addData("blue", 2);
-                }
-            } else {
-                timedrive(500,.2,.2,90);
-                setDrivePower(0,0);
-                runtime.reset();
-                while (runtime.seconds()<1){
-                    telemetry.addData("neither",0);
-                    telemetry.update();
-                }
-                runtime.reset();
-                while (opModeIsActive()&&FrontColor.red()<2&&FrontColor.blue()<2&&runtime.seconds()<1.2){
-                    setDrivePower(.3f,-.3f);
-                }
-                setDrivePower(0,0);
-                if (FrontColor.red()>2){
-                    timedrive(700,-.2,-.2,90);
-                    timedrive(2000,.2,.2,90);
-                }else {
-                    timedrive(1500,.2,.2,90);
-                }
-            }
-            gyroturn(180, 10);
-            setDrivePower(0,0);
-            runtime.reset();
-            timedrive(3000,.3,.3,180);
+        setDrivePower(0,0);
+        runtime.reset();
+        while (runtime.seconds()<1&&opModeIsActive()){
+            if (a_ground_alpha()>8){
+                setDrivePower(0.2f,0.2f);}
+            else if (a_gyro_heading()>90){setDrivePower(0,.2f);}
+            else if (a_gyro_heading()<90){setDrivePower(.2f,0);}
+            else {setDrivePower(.2f,.2f);}
         }
         /*runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
@@ -485,8 +434,8 @@ public class TimeDriveAutoBlue extends LinearOpMode {
     public void timedrive(int mills, double speedleft, double speedright, int targetheading) throws InterruptedException{
         runtime.reset();
         while (opModeIsActive() && runtime.milliseconds()<mills) {
-                telemetry.addData("-1: time driving",runtime.milliseconds());
-                if (targetheading>=0&&targetheading<=360){
+            telemetry.addData("-1: time driving",runtime.milliseconds());
+            if (targetheading>=0&&targetheading<=360){
                 double adjspeed=(speedleft+speedright)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-targetheading));
                 telemetry.addData("2: adjspeed: " ,adjspeed);
                 v_motor_left_drive.setPower(speedleft-adjspeed);
@@ -661,4 +610,3 @@ public class TimeDriveAutoBlue extends LinearOpMode {
         return returnthis;
     }
 }
-
