@@ -328,6 +328,12 @@ public class Team_10363_TeleOp_Decs {
             v_right_beacon.setPower(-.4);
         }
     }
+    public void beacon_stop() {
+        if (v_left_beacon!=null&&v_right_beacon!=null){
+            v_left_beacon.setPower(0);
+            v_right_beacon.setPower(0);
+        }
+    }
         public void beacon_retract(boolean beacons1){
             if(!beacons1&&v_left_beacon!=null&&v_right_beacon!=null){
                 v_left_beacon.setPower(.4);
