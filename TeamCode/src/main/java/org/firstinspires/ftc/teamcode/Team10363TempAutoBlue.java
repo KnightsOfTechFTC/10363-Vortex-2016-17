@@ -85,7 +85,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
         //Try to add the beacon pushing servos. The right one is in reverse.
         try {
-            v_servo_left_beacon = hardwareMap.crservo.get("left beacon");
+            v_servo_left_beacon = hardwareMap.crservo.get("left_beacon");
             v_servo_left_beacon.setDirection(CRServo.Direction.FORWARD);
             v_servo_left_beacon.setPower(0);
 
@@ -95,7 +95,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
         }
         try {
-            v_servo_right_beacon = hardwareMap.crservo.get("right beacon");
+            v_servo_right_beacon = hardwareMap.crservo.get("right_beacon");
             v_servo_right_beacon.setDirection(CRServo.Direction.REVERSE);
             v_servo_right_beacon.setPower(0);
         } catch (Exception p_exception) {
@@ -177,7 +177,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             }else{
                 telemetry.addData("front color not inited",0);
             }
-            telemetry.addData("2",2);
+            telemetry.addData("3",3);
 
             telemetry.update();
             idle();
@@ -283,7 +283,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             tempColor=a_ground_alpha();
             double veryTempGyro= a_gyro_heading();
-            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro - 45));
+            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro));
             telemetry.addData("2: adjspeed: ", adjspeed);
             v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
             v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
@@ -627,7 +627,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             deltaX=360-mid-((current-correct)%360);
         }
         adjspeed=L/(1+Math.exp(-k*deltaX))*dirmod;
-        if (adjspeed<cuttoff){
+        if (Math.abs(adjspeed)<cuttoff){
             adjspeed=0;
         }
         return adjspeed;

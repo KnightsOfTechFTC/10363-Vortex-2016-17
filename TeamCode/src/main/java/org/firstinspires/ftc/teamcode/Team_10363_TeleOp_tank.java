@@ -76,7 +76,6 @@ public class Team_10363_TeleOp_tank extends OpMode {
 
         }else {
             RobertII.m_ball_shooting_power(gamepad2.right_trigger);}
-        RobertII.press_or_reset_beacons(beacons);
         if(gamepad1.left_bumper){
             beacons1 = true;
             RobertII.beacon_extend(beacons1);
