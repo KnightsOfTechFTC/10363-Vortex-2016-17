@@ -105,7 +105,14 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
             RobertII.m_ball_shooting_power(gamepad2.right_trigger);
         }
         RobertII.press_or_reset_beacons(beacons);
-        RobertII.beacon_sweep(beacon1);
+        if(gamepad1.left_bumper){
+            beacons1 = true;
+            RobertII.beacon_extend(beacons1);
+        }
+        if(gamepad1.right_bumper){
+            beacons1 = false;
+            RobertII.beacon_retract(beacons1);
+        }
     }
     // Variable Declarations
     double leftPower;
@@ -119,6 +126,7 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
     boolean beacon1;
     boolean dpad_right;
     boolean a_press;
+    boolean beacons1;
     int mode=0;
     boolean x_press;
     boolean ball_press;

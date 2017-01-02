@@ -26,8 +26,9 @@ public class Team_10363_TeleOp_Decs {
     //servos
     private Servo v_servo_left_beacon;
     private Servo v_servo_right_beacon;
-    private Servo v_right_beacon_tube;
-    private Servo v_left_beacon_tube;
+    private CRServo v_right_beacon;
+    private CRServo v_left_beacon;
+
 
     //sensors
     private GyroSensor SensorGyro;
@@ -127,21 +128,21 @@ public class Team_10363_TeleOp_Decs {
         }
 
         try{
-            v_right_beacon_tube=ahwMap.servo.get("right_beacon_sweep");
-            v_right_beacon_tube.setDirection(Servo.Direction.FORWARD);
-            v_right_beacon_tube.setPosition(0);
+            v_right_beacon=ahwMap.crservo.get("right_beacon_sweep");
+            v_right_beacon.setDirection(CRServo.Direction.FORWARD);
+            v_right_beacon.setPower(0);
         }
         catch (Exception p_exception){
-            v_right_beacon_tube=null;
+            v_right_beacon=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         try{
-            v_left_beacon_tube=ahwMap.servo.get("left_beacon_sweep");
-            v_left_beacon_tube.setDirection(Servo.Direction.REVERSE);
-            v_left_beacon_tube.setPosition(0);
+            v_left_beacon=ahwMap.crservo.get("left_beacon_sweep");
+            v_left_beacon.setDirection(CRServo.Direction.REVERSE);
+            v_left_beacon.setPower(0);
         }
         catch (Exception p_exception){
-            v_left_beacon_tube=null;
+            v_left_beacon=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         try{
@@ -349,12 +350,16 @@ public class Team_10363_TeleOp_Decs {
             v_servo_right_beacon.setPosition(.35);
         }
     }
-    public void beacon_sweep(boolean press1){
-        if (press1){
-            v_right_beacon_tube.setPosition(.7);
+    public void beacon_extend(boolean beacons1) {
+        if (beacons1) {
+            v_left_beacon.setPower(-.4);
+            v_right_beacon.setPower(-.4);
         }
-        else {
-            v_right_beacon_tube.setPosition(0);
-        }
+    }
+        public void beacon_retract(boolean beacons1){
+            if(beacons1=false){
+                v_left_beacon.setPower(.4);
+                v_right_beacon.setPower(.4);
+            }
     }
 }
