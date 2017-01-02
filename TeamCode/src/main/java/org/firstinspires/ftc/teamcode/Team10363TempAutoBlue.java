@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
@@ -21,6 +24,9 @@ public class Team10363TempAutoBlue extends LinearOpMode {
     //ints
     int left_encoder;
     int right_encoder;
+    //double
+    double rotations_left_beacon;
+    double rotations_right_beacon;
     //motors
     DcMotor v_motor_left_drive;
     DcMotor v_motor_right_drive;
@@ -28,8 +34,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
     DcMotor v_motor_ball_shooter;
     DcMotor v_motor_lift;
     //servos
-    Servo v_servo_left_beacon;
-    Servo v_servo_right_beacon;
+    CRServo v_servo_left_beacon;
+    CRServo v_servo_right_beacon;
     //sensors
     GyroSensor SensorGyro;
     ColorSensor GroundColor;
@@ -79,18 +85,19 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
         //Try to add the beacon pushing servos. The right one is in reverse.
         try {
-            v_servo_left_beacon = hardwareMap.servo.get("left beacon");
-            v_servo_left_beacon.setDirection(Servo.Direction.FORWARD);
-            v_servo_left_beacon.setPosition(.3);
+            v_servo_left_beacon = hardwareMap.crservo.get("left beacon");
+            v_servo_left_beacon.setDirection(CRServo.Direction.FORWARD);
+            v_servo_left_beacon.setPower(0);
 
         } catch (Exception p_exception) {
             v_servo_left_beacon = null;
             DbgLog.msg(p_exception.getLocalizedMessage());
+
         }
         try {
-            v_servo_right_beacon = hardwareMap.servo.get("right beacon");
-            v_servo_right_beacon.setDirection(Servo.Direction.REVERSE);
-            v_servo_right_beacon.setPosition(.3);
+            v_servo_right_beacon = hardwareMap.crservo.get("right beacon");
+            v_servo_right_beacon.setDirection(CRServo.Direction.REVERSE);
+            v_servo_right_beacon.setPower(0);
         } catch (Exception p_exception) {
             v_servo_right_beacon = null;
             DbgLog.msg(p_exception.getLocalizedMessage());
@@ -170,6 +177,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             }else{
                 telemetry.addData("front color not inited",0);
             }
+            telemetry.addData("2",2);
 
             telemetry.update();
             idle();
@@ -180,8 +188,23 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         gyroturn(45, 11);
         gyrohold(1000,45,1.65);
         setDrivePower(0, 0);
+        boolean extend=true;
         runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+            if (v_servo_right_beacon!=null&&v_servo_left_beacon!=null){
+                if (extend){
+                    v_servo_left_beacon.setPower(1);
+                    v_servo_right_beacon.setPower(1);
+                }else {
+                    v_servo_right_beacon.setPower(0);
+                    v_servo_left_beacon.setPower(0);
+                }
+                if (runtime.milliseconds()>580){
+                    extend=false;
+                }
+            } else {
+                telemetry.addData("CR servos don't work",1);
+            }
             telemetry.addData("-1: time driving", runtime.milliseconds());
             double veryTempGyro= a_gyro_heading();
             double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro - 45));
@@ -209,14 +232,52 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         timedrive(500,.3f,.3f,90);
         gyrohold(800,90,2.5);
         runtime.reset();
-        while (runtime.milliseconds()<=600){
+        while (runtime.milliseconds()<=1000&&FrontColor.red()<2&&FrontColor.blue()<2&& opModeIsActive()){
                 setDrivePower(.2f,.6f);
+        }
+        if(FrontColor.red()>2&&FrontColor.blue()<2){
+            runtime.reset();
+            while (runtime.milliseconds()<700){
+                v_servo_right_beacon.setPower(1);
+                if (runtime.milliseconds()<500){
+                    v_servo_left_beacon.setPower(-1);
+                }
+                telemetry.update();
+                telemetry.addData("1:beacon red ",FrontColor.red());
+                telemetry.addData("2:beacon blue ",FrontColor.blue());
+            }
+            runtime.reset();
+            while (runtime.milliseconds()<700) {
+                v_servo_left_beacon.setPower(1);
+                if (runtime.milliseconds() < 500) {
+                    v_servo_right_beacon.setPower(-1);
+                }
+            }
+        }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
+            runtime.reset();
+            while (runtime.milliseconds() < 700) {
+                v_servo_left_beacon.setPower(1);
+                if (runtime.milliseconds() < 500) {
+                    v_servo_right_beacon.setPower(-1);
+                }
+                telemetry.update();
+                telemetry.addData("1:beacon red ", FrontColor.red());
+                telemetry.addData("2:beacon blue ", FrontColor.blue());
+
+                }
+            runtime.reset();
+            while (runtime.milliseconds() < 700) {
+                v_servo_right_beacon.setPower(1);
+                if (runtime.milliseconds() < 500) {
+                    v_servo_left_beacon.setPower(-1);
+                }
+            }
         }
         setDrivePower(0,0);
         gyrohold(1000,90,0);
         timedrive(1500,-.3f,-.3f,90);
-        gyroturn(0,20);
-        gyrohold(800,0,1);
+        gyroturnLogistic(0,20);
+        gyroholdLogistic(800,0,2);
         double tempColor=0;
         while (tempColor < 7 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
@@ -436,6 +497,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
 
 
+
     public void gyrohold(int mills, int targetheading,double spmod)throws InterruptedException{
         runtime.reset();
         while (runtime.milliseconds()<mills&&opModeIsActive()){
@@ -457,9 +519,49 @@ public class Team10363TempAutoBlue extends LinearOpMode {
     public void gyroturn(int targetheading, int error)throws InterruptedException{
         runtime.reset();
         double tempGyro=999999;
-        while((tempGyro<targetheading-error|tempGyro>targetheading+error)&&opModeIsActive()){
+        while((tempGyro<targetheading-error||tempGyro>targetheading+error)&&opModeIsActive()){
             tempGyro=a_gyro_heading();
             double adjspeed=(2.2)*Math.sin(((2*Math.PI)/360)*(tempGyro-targetheading));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
+                v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
+                v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
+            }
+            telemetry.addData("0: target heading",targetheading);
+            telemetry.addData("1: actual heading",tempGyro);
+            telemetry.addData("3: time passed (ms)", runtime.milliseconds());
+            telemetry.addData("4: error range", error);
+            telemetry.update();
+            // Allow time for other processes to run.
+
+            idle();
+        }
+        setDrivePower(0,0);
+    }
+    public void gyroholdLogistic(int mills, int targetheading,double spmod)throws InterruptedException{
+        runtime.reset();
+        while (runtime.milliseconds()<mills&&opModeIsActive()){
+            telemetry.addData("0: target heading",targetheading);
+            telemetry.addData("1: actual heading",a_gyro_heading());
+            double adjspeed=(spmod)*SigAdjspeed(targetheading,a_gyro_heading());
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
+                v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
+                v_motor_right_drive.setPower(Range.clip(adjspeed,-1,1));
+            }
+            telemetry.addData("3: time passed (ms)", runtime.milliseconds());
+            telemetry.update();
+            // Allow time for other processes to run.
+
+            idle();
+        }
+    }
+    public void gyroturnLogistic(int targetheading, int error)throws InterruptedException{
+        runtime.reset();
+        double tempGyro=999999;
+        while((tempGyro<targetheading-error||tempGyro>targetheading+error)&&opModeIsActive()){
+            tempGyro=a_gyro_heading();
+            double adjspeed=2*SigAdjspeed(targetheading,tempGyro);
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
@@ -514,7 +616,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         int dirmod;
         //constants to play with
         double L=1; //max value
-        double k=.1; //how fast it grows
+        double k=.05; //how fast it grows
         double mid=45; //at here, adjspeed will be .5L.
         double cuttoff=.1; //if less than this, no correction will be made.
         if ((current-correct)%360<=180){
@@ -638,21 +740,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             return a_left_encoder_pos()<=left&&a_right_encoder_pos()<=right;
         }
     }
-    public void push_left_beacon(){
-        if (v_servo_left_beacon!=null){v_servo_left_beacon.setPosition(.6);}
-    }
-    public void move_left_beacon_to_read(){
-        if (v_servo_left_beacon!=null){v_servo_left_beacon.setPosition(.45);}
-    }
-    public void reset_left_beacon_servo(){
-        if (v_servo_left_beacon!=null) {v_servo_left_beacon.setPosition(.3);}
-    }
-    public void push_right_beacon(){
-        if (v_servo_right_beacon!=null) {v_servo_right_beacon.setPosition(.6);}
-    }
-    public void reset_right_beacon_servo(){
-        if (v_servo_right_beacon!=null) {v_servo_right_beacon.setPosition(.3);}
-    }
+
     public double a_ground_blue(){
         if (GroundColor!=null) {
             return GroundColor.blue();
