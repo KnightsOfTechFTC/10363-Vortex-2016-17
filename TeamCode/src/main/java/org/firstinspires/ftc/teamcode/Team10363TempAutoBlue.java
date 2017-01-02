@@ -508,6 +508,28 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         setDrivePower(0,0);
     }
 
+    public double SigAdjspeed(double correct, double current){
+        double adjspeed;
+        double deltaX;
+        int dirmod;
+        //constants to play with
+        double L=1; //max value
+        double k=.1; //how fast it grows
+        double mid=45; //at here, adjspeed will be .5L.
+        double cuttoff=.1; //if less than this, no correction will be made.
+        if ((current-correct)%360<=180){
+            deltaX=((current-correct)%360)-mid;
+            dirmod=1;
+        }else{
+            dirmod=-1;
+            deltaX=360-mid-((current-correct)%360);
+        }
+        adjspeed=L/(1+Math.exp(-k*deltaX))*dirmod;
+        if (adjspeed<cuttoff){
+            adjspeed=0;
+        }
+        return adjspeed;
+    }
     //methods
     //Modifies the left drive motor's power
     public void m_left_drive_power(float power){
