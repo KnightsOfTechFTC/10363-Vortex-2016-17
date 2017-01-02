@@ -65,8 +65,8 @@ public class MRRGBExample extends LinearOpMode {
         //sensorRGB = hardwareMap.colorSensor.get("mr");
         sensorRGB = hardwareMap.colorSensor.get("ground");
         sensorRGB.setI2cAddress(I2cAddr.create8bit(0x3C));
-        sensorRightRGB = hardwareMap.colorSensor.get("right-color");
-        sensorRightRGB.setI2cAddress(I2cAddr.create8bit(0x44));
+        //sensorRightRGB = hardwareMap.colorSensor.get("right-color");
+        //sensorRightRGB.setI2cAddress(I2cAddr.create8bit(0x44));
         // bEnabled represents the state of the LED.
         boolean bEnabled = true;
 

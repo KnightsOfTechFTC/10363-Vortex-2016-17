@@ -83,10 +83,10 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
 
-        //Try to add the beacon pushing servos. The right one is in reverse.
+        //Try to add the beacon pushing servos. The left one is in reverse.
         try {
             v_servo_left_beacon = hardwareMap.crservo.get("left_beacon");
-            v_servo_left_beacon.setDirection(CRServo.Direction.FORWARD);
+            v_servo_left_beacon.setDirection(CRServo.Direction.REVERSE);
             v_servo_left_beacon.setPower(0);
 
         } catch (Exception p_exception) {
@@ -96,7 +96,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         }
         try {
             v_servo_right_beacon = hardwareMap.crservo.get("right_beacon");
-            v_servo_right_beacon.setDirection(CRServo.Direction.REVERSE);
+            v_servo_right_beacon.setDirection(CRServo.Direction.FORWARD);
             v_servo_right_beacon.setPower(0);
         } catch (Exception p_exception) {
             v_servo_right_beacon = null;
@@ -219,7 +219,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         }
         setDrivePower(0,0);
         timedrive(500,.3f,.3f,45);
-        setDrivePower(.45f,-.45f);
+        setDrivePower(.55f,-.55f);
         runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
@@ -237,53 +237,56 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         }
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
-            while (runtime.milliseconds()<700){
+            while (runtime.milliseconds()<1500){
                 v_servo_right_beacon.setPower(1);
                 if (runtime.milliseconds()<500){
                     v_servo_left_beacon.setPower(-1);
-                }
+                }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
                 telemetry.addData("1:beacon red ",FrontColor.red());
                 telemetry.addData("2:beacon blue ",FrontColor.blue());
             }
             runtime.reset();
-            while (runtime.milliseconds()<700) {
-                v_servo_left_beacon.setPower(1);
+            while (runtime.milliseconds()<1500) {
+                v_servo_right_beacon.setPower(-1);
                 if (runtime.milliseconds() < 500) {
-                    v_servo_right_beacon.setPower(-1);
-                }
+                    v_servo_left_beacon.setPower(1);
+                }else {v_servo_left_beacon.setPower(0);}
             }
+            v_servo_left_beacon.setPower(0);
+            v_servo_right_beacon.setPower(0);
         }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
             runtime.reset();
-            while (runtime.milliseconds() < 700) {
+            while (runtime.milliseconds() < 1500) {
                 v_servo_left_beacon.setPower(1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_right_beacon.setPower(-1);
-                }
+                }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
                 telemetry.addData("1:beacon red ", FrontColor.red());
                 telemetry.addData("2:beacon blue ", FrontColor.blue());
-
                 }
             runtime.reset();
-            while (runtime.milliseconds() < 700) {
-                v_servo_right_beacon.setPower(1);
+            while (runtime.milliseconds() < 1500) {
+                v_servo_left_beacon.setPower(-1);
                 if (runtime.milliseconds() < 500) {
-                    v_servo_left_beacon.setPower(-1);
-                }
+                    v_servo_right_beacon.setPower(1);
+                }else {v_servo_left_beacon.setPower(0);}
             }
+            v_servo_left_beacon.setPower(0);
+            v_servo_right_beacon.setPower(0);
         }
         setDrivePower(0,0);
         gyrohold(1000,90,0);
         timedrive(1500,-.3f,-.3f,90);
-        gyroturnLogistic(0,20);
+        gyroturnLogistic(0,20,2.5);
         gyroholdLogistic(800,0,2);
         double tempColor=0;
-        while (tempColor < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (tempColor < 5 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             tempColor=a_ground_alpha();
             double veryTempGyro= a_gyro_heading();
-            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro));
+            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro-10));
             telemetry.addData("2: adjspeed: ", adjspeed);
             v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
             v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
@@ -294,7 +297,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
         }
         setDrivePower(0,0);
-        timedrive(500,.3f,.3f,45);
+        timedrive(300,.3f,.3f,45);
         setDrivePower(.45f,-.45f);
         runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
@@ -310,6 +313,47 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         runtime.reset();
         while (runtime.milliseconds()<=600){
             setDrivePower(.2f,.6f);
+        }
+        if(FrontColor.red()>2&&FrontColor.blue()<2){
+            runtime.reset();
+            while (runtime.milliseconds()<1500){
+                v_servo_right_beacon.setPower(1);
+                if (runtime.milliseconds()<500){
+                    v_servo_left_beacon.setPower(-1);
+                }else {v_servo_left_beacon.setPower(0);}
+                telemetry.update();
+                telemetry.addData("1:beacon red ",FrontColor.red());
+                telemetry.addData("2:beacon blue ",FrontColor.blue());
+            }
+            runtime.reset();
+            while (runtime.milliseconds()<1500) {
+                v_servo_right_beacon.setPower(-1);
+                if (runtime.milliseconds() < 500) {
+                    v_servo_left_beacon.setPower(1);
+                }else {v_servo_left_beacon.setPower(0);}
+            }
+            v_servo_left_beacon.setPower(0);
+            v_servo_right_beacon.setPower(0);
+        }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
+            runtime.reset();
+            while (runtime.milliseconds() < 1500) {
+                v_servo_left_beacon.setPower(1);
+                if (runtime.milliseconds() < 500) {
+                    v_servo_right_beacon.setPower(-1);
+                }else {v_servo_left_beacon.setPower(0);}
+                telemetry.update();
+                telemetry.addData("1:beacon red ", FrontColor.red());
+                telemetry.addData("2:beacon blue ", FrontColor.blue());
+            }
+            runtime.reset();
+            while (runtime.milliseconds() < 1500) {
+                v_servo_left_beacon.setPower(-1);
+                if (runtime.milliseconds() < 500) {
+                    v_servo_right_beacon.setPower(1);
+                }else {v_servo_left_beacon.setPower(0);}
+            }
+            v_servo_left_beacon.setPower(0);
+            v_servo_right_beacon.setPower(0);
         }
         setDrivePower(0,0);
         gyrohold(1000,90,0);
@@ -556,12 +600,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             idle();
         }
     }
-    public void gyroturnLogistic(int targetheading, int error)throws InterruptedException{
+    public void gyroturnLogistic(int targetheading, int error,double spmod)throws InterruptedException{
         runtime.reset();
         double tempGyro=999999;
         while((tempGyro<targetheading-error||tempGyro>targetheading+error)&&opModeIsActive()){
             tempGyro=a_gyro_heading();
-            double adjspeed=2*SigAdjspeed(targetheading,tempGyro);
+            double adjspeed=spmod*SigAdjspeed(targetheading,tempGyro);
             telemetry.addData("2: adjspeed: " ,adjspeed);
             if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                 v_motor_left_drive.setPower(Range.clip(-adjspeed,-1,1));
