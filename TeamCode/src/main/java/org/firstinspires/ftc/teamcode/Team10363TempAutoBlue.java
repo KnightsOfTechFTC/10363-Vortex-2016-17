@@ -235,9 +235,10 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         while (runtime.milliseconds()<=1000&&FrontColor.red()<2&&FrontColor.blue()<2&& opModeIsActive()){
                 setDrivePower(.2f,.6f);
         }
+        timedrive(300,.4,.4,90);
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
-            while (runtime.milliseconds()<1500){
+            while (runtime.milliseconds()<2000){
                 v_servo_right_beacon.setPower(1);
                 if (runtime.milliseconds()<500){
                     v_servo_left_beacon.setPower(-1);
@@ -247,7 +248,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 telemetry.addData("2:beacon blue ",FrontColor.blue());
             }
             runtime.reset();
-            while (runtime.milliseconds()<1500) {
+            while (runtime.milliseconds()<2000) {
                 v_servo_right_beacon.setPower(-1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_left_beacon.setPower(1);
@@ -257,7 +258,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_right_beacon.setPower(0);
         }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
             runtime.reset();
-            while (runtime.milliseconds() < 1500) {
+            while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_right_beacon.setPower(-1);
@@ -267,7 +268,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 telemetry.addData("2:beacon blue ", FrontColor.blue());
                 }
             runtime.reset();
-            while (runtime.milliseconds() < 1500) {
+            while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(-1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_right_beacon.setPower(1);
@@ -279,12 +280,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         setDrivePower(0,0);
         gyrohold(1000,90,0);
         timedrive(1500,-.3f,-.3f,90);
-        gyroturnLogistic(0,20,2.5);
+        gyroturnLogistic(0,20,2.8);
         gyroholdLogistic(800,0,2);
         double tempColor=0;
         while (tempColor < 5 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
-            tempColor=a_ground_alpha();
+            tempColor=GroundColor.alpha();
             double veryTempGyro= a_gyro_heading();
             double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro-10));
             telemetry.addData("2: adjspeed: ", adjspeed);
@@ -297,8 +298,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
 
         }
         setDrivePower(0,0);
-        timedrive(300,.3f,.3f,45);
-        setDrivePower(.45f,-.45f);
+        timedrive(500,.3f,.3f,45);
+        setDrivePower(.65f,-.65f);
         runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
@@ -316,7 +317,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         }
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
-            while (runtime.milliseconds()<1500){
+            while (runtime.milliseconds()<2000){
                 v_servo_right_beacon.setPower(1);
                 if (runtime.milliseconds()<500){
                     v_servo_left_beacon.setPower(-1);
@@ -326,7 +327,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 telemetry.addData("2:beacon blue ",FrontColor.blue());
             }
             runtime.reset();
-            while (runtime.milliseconds()<1500) {
+            while (runtime.milliseconds()<2000) {
                 v_servo_right_beacon.setPower(-1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_left_beacon.setPower(1);
@@ -336,7 +337,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_right_beacon.setPower(0);
         }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
             runtime.reset();
-            while (runtime.milliseconds() < 1500) {
+            while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_right_beacon.setPower(-1);
@@ -346,7 +347,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 telemetry.addData("2:beacon blue ", FrontColor.blue());
             }
             runtime.reset();
-            while (runtime.milliseconds() < 1500) {
+            while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(-1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_right_beacon.setPower(1);
