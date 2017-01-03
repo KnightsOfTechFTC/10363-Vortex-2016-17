@@ -73,7 +73,7 @@ public class Team_10363_TeleOp_Decs {
         }
         try {
             v_motor_cap_left=ahwMap.dcMotor.get("cap-left");
-            v_motor_cap_left.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_cap_left.setDirection(DcMotor.Direction.FORWARD);
             v_motor_cap_left.setPower(0);
             v_motor_cap_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_cap_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

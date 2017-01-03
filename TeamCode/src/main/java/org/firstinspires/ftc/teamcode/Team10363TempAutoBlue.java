@@ -85,7 +85,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         //Try to add the beacon pushing servos. The left one is in reverse.
         try {
             v_servo_left_beacon = hardwareMap.crservo.get("left_beacon");
-            v_servo_left_beacon.setDirection(CRServo.Direction.REVERSE);
+            v_servo_left_beacon.setDirection(CRServo.Direction.FORWARD);
             v_servo_left_beacon.setPower(0);
 
         } catch (Exception p_exception) {
@@ -235,11 +235,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 setDrivePower(.2f,.6f);
         }
         timedrive(300,.4,.4,90);
+        timedrive(400,0,.4,90);
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
             v_servo_right_beacon.setPower(1);
             while (runtime.milliseconds()<2000){
-                if (runtime.milliseconds()<1080){
+                if (runtime.milliseconds()<1300){
                     v_servo_left_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
@@ -255,7 +256,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             runtime.reset();
             v_servo_left_beacon.setPower(1);
             while (runtime.milliseconds() < 2000) {
-                if (runtime.milliseconds() < 1080) {
+                if (runtime.milliseconds() < 1300) {
                     v_servo_right_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
