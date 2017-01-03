@@ -237,8 +237,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         timedrive(300,.4,.4,90);
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
+            v_servo_right_beacon.setPower(1);
             while (runtime.milliseconds()<2000){
-                v_servo_right_beacon.setPower(1);
                 if (runtime.milliseconds()<500){
                     v_servo_left_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
@@ -253,8 +253,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_right_beacon.setPower(0);
         }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
             runtime.reset();
+            v_servo_left_beacon.setPower(1);
             while (runtime.milliseconds() < 2000) {
-                v_servo_left_beacon.setPower(1);
                 if (runtime.milliseconds() < 500) {
                     v_servo_right_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
@@ -357,7 +357,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             idle();}
         runtime.reset();
         timedrive(500,.3f,.3f,90);
-        gyrohold(1000,95,2.5);
+        gyrohold(1000,85,2.5);
         runtime.reset();
         while (runtime.milliseconds()<=600){
             setDrivePower(.2f,1f);
