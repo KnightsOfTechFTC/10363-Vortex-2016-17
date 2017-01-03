@@ -198,7 +198,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                     v_servo_right_beacon.setPower(0);
                     v_servo_left_beacon.setPower(0);
                 }
-                if (runtime.milliseconds()>580){
+                if (runtime.milliseconds()>1080){
                     extend=false;
                 }
             } else {
@@ -239,7 +239,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             runtime.reset();
             v_servo_right_beacon.setPower(1);
             while (runtime.milliseconds()<2000){
-                if (runtime.milliseconds()<500){
+                if (runtime.milliseconds()<1080){
                     v_servo_left_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
@@ -255,7 +255,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             runtime.reset();
             v_servo_left_beacon.setPower(1);
             while (runtime.milliseconds() < 2000) {
-                if (runtime.milliseconds() < 500) {
+                if (runtime.milliseconds() < 1080) {
                     v_servo_right_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
@@ -297,7 +297,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 v_servo_left_beacon.setPower(-1);
             }
             if (right_beacon==0){
-                if (runtime.milliseconds()<580){
+                if (runtime.milliseconds()<1080){
                     v_servo_left_beacon.setPower(-1);
                     v_servo_right_beacon.setPower(-1);
                 }else{
@@ -325,7 +325,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                     v_servo_right_beacon.setPower(0);
                     v_servo_left_beacon.setPower(0);
                 }
-                if (runtime.milliseconds()>580){
+                if (runtime.milliseconds()>1080){
                     extend=false;
                 }
             } else {
@@ -362,11 +362,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         while (runtime.milliseconds()<=600){
             setDrivePower(.2f,1f);
         }
+        setDrivePower(0,0);
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
             while (runtime.milliseconds()<2000){
                 v_servo_right_beacon.setPower(1);
-                if (runtime.milliseconds()<500){
+                if (runtime.milliseconds()<1080){
                     v_servo_left_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
@@ -384,7 +385,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             runtime.reset();
             while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(1);
-                if (runtime.milliseconds() < 500) {
+                if (runtime.milliseconds() < 1080) {
                     v_servo_right_beacon.setPower(-1);
                 }else {v_servo_left_beacon.setPower(0);}
                 telemetry.update();
@@ -400,7 +401,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
         }
-        setDrivePower(0,0);
+
         gyrohold(1000,90,0);
         /*runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
