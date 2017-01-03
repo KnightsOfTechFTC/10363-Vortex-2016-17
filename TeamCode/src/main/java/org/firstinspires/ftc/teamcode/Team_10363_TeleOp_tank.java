@@ -79,10 +79,11 @@ public class Team_10363_TeleOp_tank extends OpMode {
         if(gamepad1.left_bumper){
             beacons1 = true;
             RobertII.beacon_extend(beacons1);
-        }
-        if(gamepad1.right_bumper){
+        }else if(gamepad1.right_bumper){
             beacons1 = false;
             RobertII.beacon_retract(beacons1);
+        }else{
+            RobertII.beacon_stop();
         }
     }
     double leftPower;
