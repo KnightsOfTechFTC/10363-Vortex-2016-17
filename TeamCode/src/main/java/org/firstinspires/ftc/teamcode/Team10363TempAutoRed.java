@@ -271,7 +271,7 @@ public class Team10363TempAutoRed extends LinearOpMode {
             left_beacon=0;
         }
         setDrivePower(0,0);
-        gyrohold(1000,90,0);
+        gyrohold(1000,270,0);
         //timedrive(1500,-.3f,-.3f,90);
         runtime.reset();
         while (opModeIsActive() && runtime.milliseconds()<1500) {
