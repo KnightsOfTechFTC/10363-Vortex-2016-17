@@ -62,7 +62,7 @@ public class Team_10363_TeleOp_Decs {
         }
         try {
             v_motor_cap_right=ahwMap.dcMotor.get("cap-right");
-            v_motor_cap_right.setDirection(DcMotor.Direction.FORWARD);
+            v_motor_cap_right.setDirection(DcMotor.Direction.REVERSE);
             v_motor_cap_right.setPower(0);
             v_motor_cap_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_cap_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -305,7 +305,7 @@ public class Team_10363_TeleOp_Decs {
     public void m_cap_power(float power){
         if(v_motor_cap_left!=null&&v_motor_cap_right!=null){
             float sendpower=Range.clip(power,-1,1);
-            v_motor_cap_left.setPower(sendpower);
+            v_motor_cap_left.setPower(sendpower*0.95);
             v_motor_cap_right.setPower(sendpower);
         }
     }
