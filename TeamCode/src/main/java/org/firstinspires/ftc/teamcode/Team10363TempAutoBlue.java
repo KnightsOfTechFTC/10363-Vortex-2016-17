@@ -184,7 +184,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         v_motor_right_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         v_motor_left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         // drive forward away from wall
-        timedrive(1000, .5f, .5f, -5);
+        timedrive(1000, .3f, .3f, -5);
         // turn towards beacon
         gyroturn(45, 11);
         // correct for any error in the turn to point at 45 degrees
@@ -194,7 +194,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // if white line not detected then stop after 5 secs
         boolean extend=true;
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
             if (v_servo_right_beacon!=null&&v_servo_left_beacon!=null){
                 if (extend){
                     v_servo_left_beacon.setPower(1);
@@ -213,8 +213,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             double veryTempGyro= a_gyro_heading();
             double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro - 45));
             telemetry.addData("2: adjspeed: ", adjspeed);
-            v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
-            v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
+            v_motor_left_drive.setPower(Range.clip(.4 - adjspeed, -1, 1));
+            v_motor_right_drive.setPower(Range.clip(.4 + adjspeed, -1, 1));
             telemetry.addData("5: Heading ", veryTempGyro);
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
             telemetry.update();
@@ -228,7 +228,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         setDrivePower(.55f,-.55f);
         // stop turning once white line is detected or after 5 secs
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -335,7 +335,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // put the color sensor in range and drive until the white line is detected
         extend=true;
         runtime.reset();
-        while (tempColor < 3 && opModeIsActive() && runtime.seconds() < 5) {
+        while (tempColor < 5 && opModeIsActive() && runtime.seconds() < 5) {
             if (v_servo_right_beacon!=null&&v_servo_left_beacon!=null){
                 if (extend){
                     v_servo_left_beacon.setPower(1);
@@ -369,7 +369,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // turn towards the beacon until the white line is detected or 5 secs
         setDrivePower(.65f,-.65f);
         runtime.reset();
-        while (a_ground_alpha() < 3 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -400,11 +400,14 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             }
             runtime.reset();
             v_servo_left_beacon.setPower(0);
-            while (runtime.milliseconds()<2000) {
+/*            while (runtime.milliseconds()<2000) {
                 v_servo_right_beacon.setPower(-1);
-            }
+            } */
+            left_beacon=-1;
+            right_beacon=1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
+
         // else if blue is detected extend the left beacon presser
         }else if(FrontColor.red()<2&&FrontColor.blue()>2) {
             runtime.reset();
@@ -419,10 +422,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             }
             v_servo_right_beacon.setPower(0);
             runtime.reset();
-            while (runtime.milliseconds() < 2000) {
+/*            while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(-1);
 
-            }
+            } */
+            left_beacon=1;
+            right_beacon=-1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
         }
@@ -434,7 +439,45 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // turn towards the vortex base
         gyroturn(50, 11);
         // drive towards the vortex base
-        timedrive(2650,-1.0f,-1.0f,-5);
+//        timedrive(2725,-1.0f,-1.0f,-5);
+        runtime.reset();
+        while (opModeIsActive() && runtime.milliseconds()<2725) {
+            telemetry.addData("-1: time driving",runtime.milliseconds());
+            double adjspeed=(-.3+-.3)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(-1+adjspeed);
+            v_motor_right_drive.setPower(-1-adjspeed);
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("8: Beacon Red ", a_left_red());
+            telemetry.addData("9: Beacon Blue ", a_left_blue());
+            telemetry.addData("10: last state left ", left_encoder);
+            telemetry.addData("11: last state right ", right_encoder);
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            if (right_beacon==1){
+                if (runtime.milliseconds()<1500) {
+                    v_servo_right_beacon.setPower(-1);
+                }
+            }
+            if (left_beacon==1){
+                if (runtime.milliseconds()<1500) {
+                    v_servo_left_beacon.setPower(-1);
+                }
+            }
+            if (right_beacon==0){
+                if (runtime.milliseconds()<1080){
+                    v_servo_left_beacon.setPower(-1);
+                    v_servo_right_beacon.setPower(-1);
+                }else{
+                    v_servo_right_beacon.setPower(0);
+                    v_servo_left_beacon.setPower(0);
+                }
+            }
+            // Allow time for other processes to run.
+            idle();
+        }
         // stop on the vortex base
         setDrivePower(0,0);
 
