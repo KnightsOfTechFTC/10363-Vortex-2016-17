@@ -335,7 +335,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // put the color sensor in range and drive until the white line is detected
         extend=true;
         runtime.reset();
-        while (tempColor < 5 && opModeIsActive() && runtime.seconds() < 5) {
+        while (tempColor < 3 && opModeIsActive() && runtime.seconds() < 5) {
             if (v_servo_right_beacon!=null&&v_servo_left_beacon!=null){
                 if (extend){
                     v_servo_left_beacon.setPower(1);
@@ -369,7 +369,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // turn towards the beacon until the white line is detected or 5 secs
         setDrivePower(.65f,-.65f);
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 3 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -432,7 +432,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         //move away from the wall
         timedrive(500,-.5f,-.5f,90);
         // turn towards the vortex base
-        gyroturn(49, 11);
+        gyroturn(50, 11);
         // drive towards the vortex base
         timedrive(2650,-1.0f,-1.0f,-5);
         // stop on the vortex base
