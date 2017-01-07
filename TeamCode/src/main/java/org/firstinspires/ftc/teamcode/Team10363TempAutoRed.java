@@ -1,21 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
-/**
- * Created by mathnerd on 1/3/17.
- */
-
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+/**
+ * Created by Lego5 on 12/21/2016.
+ */
 @Autonomous(name = "10363 Auto on Red")
 public class Team10363TempAutoRed extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -181,13 +183,18 @@ public class Team10363TempAutoRed extends LinearOpMode {
         }
         v_motor_right_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         v_motor_left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        timedrive(1000, .5f, .5f, -5);
+        // drive forward away from wall
+        timedrive(1000, .3f, .3f, -5);
+        // turn towards beacon
         gyroturn(315, 11);
-        gyrohold(1000,315,1.65);
+        // correct for any error in the turn to point at 45 degrees
+        gyrohold(1000,315,2);
         setDrivePower(0, 0);
+        // extend the plastic to read the beacon color and drive to the white line
+        // if white line not detected then stop after 5 secs
         boolean extend=true;
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
             if (v_servo_right_beacon!=null&&v_servo_left_beacon!=null){
                 if (extend){
                     v_servo_left_beacon.setPower(1);
@@ -206,8 +213,8 @@ public class Team10363TempAutoRed extends LinearOpMode {
             double veryTempGyro= a_gyro_heading();
             double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro - 315));
             telemetry.addData("2: adjspeed: ", adjspeed);
-            v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
-            v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
+            v_motor_left_drive.setPower(Range.clip(.4 - adjspeed, -1, 1));
+            v_motor_right_drive.setPower(Range.clip(.4 + adjspeed, -1, 1));
             telemetry.addData("5: Heading ", veryTempGyro);
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
             telemetry.update();
@@ -215,10 +222,13 @@ public class Team10363TempAutoRed extends LinearOpMode {
 
         }
         setDrivePower(0,0);
+        // drive straight another 500 ms to center robot with the white line
         timedrive(500,.3f,.3f,315);
+        // start tank turn towards white line
         setDrivePower(-.55f,.55f);
+        // stop turning once white line is detected or after 5 secs
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -226,14 +236,19 @@ public class Team10363TempAutoRed extends LinearOpMode {
             telemetry.update();
             idle();}
         runtime.reset();
-        timedrive(500,.3f,.3f,270);
+        // drive straight towards the beacon after detecting the white line
+        timedrive(375,.3f,.3f,270);
+        // adjust angle of robot to face the wall if needed
         gyrohold(800,270,2.5);
+        // finish drive to beacon until the color sensor sees red or blue
         runtime.reset();
         while (runtime.milliseconds()<=1000&&FrontColor.red()<2&&FrontColor.blue()<2&& opModeIsActive()){
             setDrivePower(.6f,.2f);
         }
+        // adjustments to align to the beacon
         timedrive(300,.4,.4,270);
-        timedrive(400,.4f,0,270);
+        timedrive(400,0,.4,270);
+        // if the left beacon color is red, extend the right beacon presser
         if(FrontColor.red()<2&&FrontColor.blue()>2){
             runtime.reset();
             v_servo_right_beacon.setPower(1);
@@ -250,6 +265,7 @@ public class Team10363TempAutoRed extends LinearOpMode {
             right_beacon=1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
+            // else if the left beacon color is blue, extend the left beacon presser
         }else if(FrontColor.red()>2&&FrontColor.blue()<2) {
             runtime.reset();
             v_servo_left_beacon.setPower(1);
@@ -266,6 +282,7 @@ public class Team10363TempAutoRed extends LinearOpMode {
             right_beacon=-1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
+            // otherwise do nothing
         }else {
             right_beacon=0;
             left_beacon=0;
@@ -273,6 +290,7 @@ public class Team10363TempAutoRed extends LinearOpMode {
         setDrivePower(0,0);
         gyrohold(1000,270,0);
         //timedrive(1500,-.3f,-.3f,90);
+        // back up and retract the beacon presser
         runtime.reset();
         while (opModeIsActive() && runtime.milliseconds()<1500) {
             telemetry.addData("-1: time driving",runtime.milliseconds());
@@ -308,11 +326,13 @@ public class Team10363TempAutoRed extends LinearOpMode {
             idle();
         }
         setDrivePower(0,0);
+        // turn towards the second beacon
         gyroturnLogistic(0,20,2.8);
         v_servo_left_beacon.setPower(0);
         v_servo_right_beacon.setPower(0);
         gyroholdLogistic(800,0,2);
         double tempColor=0;
+        // put the color sensor in range and drive until the white line is detected
         extend=true;
         runtime.reset();
         while (tempColor < 5 && opModeIsActive() && runtime.seconds() < 5) {
@@ -333,7 +353,7 @@ public class Team10363TempAutoRed extends LinearOpMode {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             tempColor=GroundColor.alpha();
             double veryTempGyro= a_gyro_heading();
-            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro-350));
+            double adjspeed = (.5 + .5) * Math.sin(((2 * Math.PI) / 360) * (veryTempGyro-345));
             telemetry.addData("2: adjspeed: ", adjspeed);
             v_motor_left_drive.setPower(Range.clip(.3 - adjspeed, -1, 1));
             v_motor_right_drive.setPower(Range.clip(.3 + adjspeed, -1, 1));
@@ -344,10 +364,12 @@ public class Team10363TempAutoRed extends LinearOpMode {
 
         }
         setDrivePower(0,0);
+        // drive past the white line to center the robot
         timedrive(500,.3f,.3f,315);
+        // turn towards the beacon until the white line is detected or 5 secs
         setDrivePower(-.65f,.65f);
         runtime.reset();
-        while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -355,13 +377,16 @@ public class Team10363TempAutoRed extends LinearOpMode {
             telemetry.update();
             idle();}
         runtime.reset();
+        // drive towards the beacon
         timedrive(500,.3f,.3f,270);
+        // adjust the angle of the robot and continue driving
         gyrohold(1000,275,2.5);
         runtime.reset();
         while (runtime.milliseconds()<=600){
             setDrivePower(1f,.2f);
         }
         setDrivePower(0,0);
+        // if red is detected extend the right beacon presser
         if(FrontColor.red()<2&&FrontColor.blue()>2){
             runtime.reset();
             while (runtime.milliseconds()<2000){
@@ -375,11 +400,15 @@ public class Team10363TempAutoRed extends LinearOpMode {
             }
             runtime.reset();
             v_servo_left_beacon.setPower(0);
-            while (runtime.milliseconds()<2000) {
+/*            while (runtime.milliseconds()<2000) {
                 v_servo_right_beacon.setPower(-1);
-            }
+            } */
+            left_beacon=-1;
+            right_beacon=1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
+
+            // else if blue is detected extend the left beacon presser
         }else if(FrontColor.red()>2&&FrontColor.blue()<2) {
             runtime.reset();
             while (runtime.milliseconds() < 2000) {
@@ -393,15 +422,65 @@ public class Team10363TempAutoRed extends LinearOpMode {
             }
             v_servo_right_beacon.setPower(0);
             runtime.reset();
-            while (runtime.milliseconds() < 2000) {
+/*            while (runtime.milliseconds() < 2000) {
                 v_servo_left_beacon.setPower(-1);
 
-            }
+            } */
+            left_beacon=1;
+            right_beacon=-1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
         }
 
-        gyrohold(1000,270,0);
+//        gyrohold(1000,90,0);
+
+        //move away from the wall
+        timedrive(500,-.5f,-.5f,270);
+        // turn towards the vortex base
+        gyroturn(310, 11);
+        // drive towards the vortex base
+//        timedrive(2725,-1.0f,-1.0f,-5);
+        runtime.reset();
+        while (opModeIsActive() && runtime.milliseconds()<2725) {
+            telemetry.addData("-1: time driving",runtime.milliseconds());
+            double adjspeed=(-.3+-.3)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-315));
+            telemetry.addData("2: adjspeed: " ,adjspeed);
+            v_motor_left_drive.setPower(-1+adjspeed);
+            v_motor_right_drive.setPower(-1-adjspeed);
+            telemetry.addData("5: Heading ", a_gyro_heading());
+            telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
+            telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
+            telemetry.addData("8: Beacon Red ", a_left_red());
+            telemetry.addData("9: Beacon Blue ", a_left_blue());
+            telemetry.addData("10: last state left ", left_encoder);
+            telemetry.addData("11: last state right ", right_encoder);
+            telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.update();
+            if (right_beacon==1){
+                if (runtime.milliseconds()<1500) {
+                    v_servo_right_beacon.setPower(-1);
+                }
+            }
+            if (left_beacon==1){
+                if (runtime.milliseconds()<1500) {
+                    v_servo_left_beacon.setPower(-1);
+                }
+            }
+            if (right_beacon==0){
+                if (runtime.milliseconds()<1080){
+                    v_servo_left_beacon.setPower(-1);
+                    v_servo_right_beacon.setPower(-1);
+                }else{
+                    v_servo_right_beacon.setPower(0);
+                    v_servo_left_beacon.setPower(0);
+                }
+            }
+            // Allow time for other processes to run.
+            idle();
+        }
+        // stop on the vortex base
+        setDrivePower(0,0);
+
         /*runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());

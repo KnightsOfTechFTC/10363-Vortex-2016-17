@@ -188,7 +188,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // turn towards beacon
         gyroturn(45, 11);
         // correct for any error in the turn to point at 45 degrees
-        gyrohold(1000,45,1.65);
+        gyrohold(1000,45,2);
         setDrivePower(0, 0);
         // extend the plastic to read the beacon color and drive to the white line
         // if white line not detected then stop after 5 secs
