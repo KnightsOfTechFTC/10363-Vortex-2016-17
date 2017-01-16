@@ -119,7 +119,7 @@ public class Team_10363_TeleOp_Decs {
         }
         try{
             v_left_beacon=ahwMap.crservo.get("left_beacon");
-            v_left_beacon.setDirection(CRServo.Direction.REVERSE);
+            v_left_beacon.setDirection(CRServo.Direction.FORWARD);
             v_left_beacon.setPower(0);
         }
         catch (Exception p_exception){
