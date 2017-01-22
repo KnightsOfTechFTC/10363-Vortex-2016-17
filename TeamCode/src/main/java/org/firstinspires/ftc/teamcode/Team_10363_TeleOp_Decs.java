@@ -28,6 +28,7 @@ public class Team_10363_TeleOp_Decs {
     private Servo v_servo_right_beacon;
     private CRServo v_right_beacon;
     private CRServo v_left_beacon;
+    private Servo v_servo_lift;
 
 
     //sensors
@@ -138,6 +139,14 @@ public class Team_10363_TeleOp_Decs {
             v_motor_lift=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
+        try {
+            v_servo_lift=ahwMap.servo.get("lift");
+            v_servo_lift.setDirection(Servo.Direction.FORWARD);
+            v_servo_lift.setPosition(.6);
+        }catch (Exception p_exception){
+            v_servo_lift=null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
         //Try to add the gyro
         try {
             SensorGyro=ahwMap.gyroSensor.get("gyro");
@@ -188,6 +197,12 @@ public class Team_10363_TeleOp_Decs {
         }
         else {
             setDrivePower(left_power,right_power);
+        }
+    }
+
+    public void m_lift_pos(double delta){
+        if (v_servo_lift!=null){
+            v_servo_lift.setPosition(v_servo_lift.getPosition()+delta);
         }
     }
     /* Does the calculations for single stick driving for the left drive motor.
