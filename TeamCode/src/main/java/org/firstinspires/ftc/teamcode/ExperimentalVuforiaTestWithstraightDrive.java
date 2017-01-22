@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,7 +25,7 @@ import java.util.Objects;
 /**
  * Created by mathnerd on 1/16/17.
  */
-
+@Autonomous(name = "vuforia test (experimental)")
 public class ExperimentalVuforiaTestWithstraightDrive extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor v_motor_left_drive;
@@ -36,7 +37,7 @@ public class ExperimentalVuforiaTestWithstraightDrive extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         parameters.vuforiaLicenseKey = "AWThhw//////AAAAGYgme8IEP0VXvW2eMc9GLHcCZt2HTjBY2BEZ7DmxzEgLDypsGvRgR2xr2douQ6h3nAzHpg7/HFpa4/DOlekbygKLhWdBAH2AhAu2r6nAn4ejWfQq32k4JVGOTbAMkx7H2fuHDYZduZQJiW/1pFJt0SdcqvClYOFtbdb+OaKHOTkLgmI3zWDBtjfM6Pc+FRchtsK3ITl1MxVtsVNsfZNC2UQREHd23ABZsQ0jrFcXaDwmR3Q1s3tOSRs3lMdJXk+riKmk2yLyat+pIRzHoUuvTQURKcvqgK00LVqWiOaarRlnOnccxzf2lO5jv4v2gohQXAxu6KpAQxsDyj1JrKYv91mWssJKeTbeXchIeLvqyCpn";
-        parameters.cameraMonitorFeedback = VuforiaLocalizer.Parameters.CameraMonitorFeedback.BUILDINGS;
+        parameters.cameraMonitorFeedback = VuforiaLocalizer.Parameters.CameraMonitorFeedback.AXES;
 
 
         VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters);
@@ -46,7 +47,6 @@ public class ExperimentalVuforiaTestWithstraightDrive extends LinearOpMode {
         beacons.get(1).setName("tools");
         beacons.get(2).setName("legos");
         beacons.get(3).setName("gears");
-
 
 
         try {
@@ -94,31 +94,27 @@ public class ExperimentalVuforiaTestWithstraightDrive extends LinearOpMode {
             FrontColor = null;
         }
         waitForStart();
-        timedrive(1000,.3,.3,-5);
-        gyroturn(45, 11);
-        gyrohold(1000,45,2);
+
         beacons.activate();
-        while (opModeIsActive()&&FrontColor.red()<2&&FrontColor.blue()<2) {
-            double targetdeg=0;
-            for (VuforiaTrackable beac : beacons){
-                OpenGLMatrix pos=((VuforiaTrackableDefaultListener)beac.getListener()).getPose();
-                if (pos!=null){
-                    VectorF translation=pos.getTranslation();
-                    telemetry.addData(beac.getName()+"translation", translation);
-                    double degtoturn=Math.toDegrees(Math.atan2(translation.get(1),translation.get(2)));
-                    telemetry.addData(beac.getName()+"degrees",degtoturn);
-                    if (Objects.equals(beac.getName(), "gears")){
-                        targetdeg=degtoturn;
-                    }
+
+        while (opModeIsActive()) {
+            for (VuforiaTrackable beac : beacons) {
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+
+                if (pose != null) {
+                    VectorF translation = pose.getTranslation();
+
+                    telemetry.addData(beac.getName() + "-Translation", translation);
+
+                    double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+
+                    telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
                 }
             }
-            double adjspeed=Math.sin(((2*Math.PI)/360)*(-targetdeg));
-            setDrivePower((float) (.3f-adjspeed),(float) (.3f+adjspeed));
-            telemetry.addData("2: adjspeed: " ,adjspeed);
             telemetry.update();
         }
-
     }
+
     public void timedrive(int mills, double speedleft, double speedright, int targetheading) throws InterruptedException{
         runtime.reset();
         while (opModeIsActive() && runtime.milliseconds()<mills) {
