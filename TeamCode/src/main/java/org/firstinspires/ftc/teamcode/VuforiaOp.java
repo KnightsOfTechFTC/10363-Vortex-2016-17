@@ -52,7 +52,7 @@ public class VuforiaOp extends LinearOpMode {
                     }else{
                         degreesToTurn-=180;
                     }
-
+                    degreesToTurn*=-1;
                     telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
                 }
             }
