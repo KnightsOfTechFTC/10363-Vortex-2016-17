@@ -115,6 +115,11 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
         }else {
             RobertII.beacon_stop();
         }
+        if (gamepad1.a||gamepad2.a){
+            RobertII.m_lift_pos(-.1);
+        }else if (gamepad1.y||gamepad2.y){
+            RobertII.m_lift_pos(.1);
+        }
     }
     // Variable Declarations
     double leftPower;

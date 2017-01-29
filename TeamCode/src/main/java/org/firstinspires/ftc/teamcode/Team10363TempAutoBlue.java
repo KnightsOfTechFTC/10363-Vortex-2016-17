@@ -33,6 +33,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
     DcMotor v_motor_ball_shooter;
     DcMotor v_motor_lift;
     //servos
+    Servo v_servo_lift;
     CRServo v_servo_left_beacon;
     CRServo v_servo_right_beacon;
     //sensors
@@ -99,6 +100,14 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_right_beacon.setPower(0);
         } catch (Exception p_exception) {
             v_servo_right_beacon = null;
+            DbgLog.msg(p_exception.getLocalizedMessage());
+        }
+        try {
+            v_servo_lift=hardwareMap.servo.get("lift");
+            v_servo_lift.setDirection(Servo.Direction.FORWARD);
+            v_servo_lift.setPosition(.4);
+        }catch (Exception p_exception){
+            v_servo_lift=null;
             DbgLog.msg(p_exception.getLocalizedMessage());
         }
         //Try to add the gyro
@@ -431,6 +440,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
         }
+        v_motor_ball_shooter.setPower(1);
 
 //        gyrohold(1000,90,0);
 
@@ -478,8 +488,11 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             // Allow time for other processes to run.
             idle();
         }
+        v_servo_lift.setPosition(1);
         // stop on the vortex base
         setDrivePower(0,0);
+        v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        v_motor_ball_shooter.setPower(0);
 
         /*runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
