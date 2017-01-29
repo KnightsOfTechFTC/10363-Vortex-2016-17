@@ -197,7 +197,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // turn towards beacon
         gyroturn(45, 11);
         // correct for any error in the turn to point at 45 degrees
-        gyrohold(1000,45,2);
+        gyrohold(1000,45,2.5);
         setDrivePower(0, 0);
         // extend the plastic to read the beacon color and drive to the white line
         // if white line not detected then stop after 5 secs
@@ -305,8 +305,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             telemetry.addData("-1: time driving",runtime.milliseconds());
                 double adjspeed=(-.3+-.3)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-90));
                 telemetry.addData("2: adjspeed: " ,adjspeed);
-                v_motor_left_drive.setPower(-.3-adjspeed);
-                v_motor_right_drive.setPower(-.3+adjspeed);
+                v_motor_left_drive.setPower(-.4-adjspeed);
+                v_motor_right_drive.setPower(-.4+adjspeed);
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -391,10 +391,11 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // adjust the angle of the robot and continue driving
         gyrohold(1000,85,2.5);
         runtime.reset();
-        while (runtime.milliseconds()<=600){
-            setDrivePower(.2f,1f);
+        while (runtime.milliseconds()<=500){
+            setDrivePower(.4f,1f);
         }
         setDrivePower(0,0);
+        v_motor_ball_shooter.setPower(1);
         // if red is detected extend the right beacon presser
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
@@ -440,7 +441,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
         }
-        v_motor_ball_shooter.setPower(1);
+
 
 //        gyrohold(1000,90,0);
 
@@ -485,10 +486,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                     v_servo_left_beacon.setPower(0);
                 }
             }
+            if (runtime.milliseconds()>1730){
+                v_servo_lift.setPosition(1);
+            }
             // Allow time for other processes to run.
             idle();
         }
-        v_servo_lift.setPosition(1);
         // stop on the vortex base
         setDrivePower(0,0);
         v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
