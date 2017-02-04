@@ -318,6 +318,7 @@ public class VuforiaLineFollowingTest extends LinearOpMode {
             timedrive(300, .4, .4, 90);
             timedrive(400, 0, .4, 90);
         }
+        beacons.deactivate();
         // if the left beacon color is red, extend the right beacon presser
         if(FrontColor.red()>2&&FrontColor.blue()<2){
             runtime.reset();
@@ -437,6 +438,8 @@ public class VuforiaLineFollowingTest extends LinearOpMode {
         // drive past the white line to center the robot
         timedrive(500,.3f,.3f,45);
         // turn towards the beacon until the white line is detected or 5 secs
+        beacons.activate();
+        boolean seeslego=false;
         setDrivePower(.65f,-.65f);
         runtime.reset();
         while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
@@ -447,15 +450,56 @@ public class VuforiaLineFollowingTest extends LinearOpMode {
             telemetry.update();
             idle();}
         runtime.reset();
-        // drive towards the beacon
-        timedrive(500,.3f,.3f,90);
-        // adjust the angle of the robot and continue driving
-        gyrohold(1000,85,2.5);
-        runtime.reset();
-        while (runtime.milliseconds()<=500){
-            setDrivePower(.4f,1f);
+        for (VuforiaTrackable beac:beacons){
+            if (Objects.equals(beac.getName(), "Lego")){
+                seeslego=true;
+            }
         }
-        setDrivePower(0,0);
+        if (seeslego){
+            while (opModeIsActive()&&FrontColor.blue()<2&&FrontColor.red()<2){
+                double deg=0;
+                for(VuforiaTrackable beac : beacons){
+                    OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+
+                    if(pose != null){
+                        VectorF translation = pose.getTranslation();
+
+                        telemetry.addData(beac.getName() + "-Translation", translation);
+
+                        double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                        if (degreesToTurn<0){
+                            degreesToTurn+=180;
+                        }else{
+                            degreesToTurn-=180;
+                        }
+                        degreesToTurn*=-1;
+                        telemetry.addData(beac.getName() + "-Degrees", degreesToTurn);
+                        if (Objects.equals(beac.getName(), "Lego")){
+                            deg=degreesToTurn;
+                        }
+                    }
+                }
+                telemetry.update();
+                double adjspeed=(1)*Math.sin(((2*Math.PI)/360)*(deg));
+                if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
+                    v_motor_left_drive.setPower(.4-adjspeed);
+                    v_motor_right_drive.setPower(.4+adjspeed);
+                }
+            }
+            setDrivePower(0,0);
+            timedrive(300, .4, .4, 90);
+            timedrive(400, 0, .4, 90);
+        }else {
+            // drive towards the beacon
+            timedrive(500, .3f, .3f, 90);
+            // adjust the angle of the robot and continue driving
+            gyrohold(1000, 85, 2.5);
+            runtime.reset();
+            while (runtime.milliseconds() <= 500) {
+                setDrivePower(.4f, 1f);
+            }
+            setDrivePower(0, 0);
+        }
         v_motor_ball_shooter.setPower(1);
         // if red is detected extend the right beacon presser
         if(FrontColor.red()>2&&FrontColor.blue()<2){
