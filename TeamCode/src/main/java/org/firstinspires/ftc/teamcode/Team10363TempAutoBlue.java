@@ -456,8 +456,10 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             telemetry.addData("-1: time driving",runtime.milliseconds());
             double adjspeed=(-.3+-.3)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
             telemetry.addData("2: adjspeed: " ,adjspeed);
-            v_motor_left_drive.setPower(-1+adjspeed);
-            v_motor_right_drive.setPower(-1-adjspeed);
+            if (runtime.milliseconds()<1330||runtime.milliseconds()>1740) {
+                v_motor_left_drive.setPower(-1 + adjspeed);
+                v_motor_right_drive.setPower(-1 - adjspeed);
+            }
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -485,6 +487,12 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                     v_servo_right_beacon.setPower(0);
                     v_servo_left_beacon.setPower(0);
                 }
+            }
+            if (runtime.milliseconds()>1330&&runtime.milliseconds()<1740){
+                v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                v_motor_left_drive.setPower(0);
+                v_motor_right_drive.setPower(0);
             }
             if (runtime.milliseconds()>1730){
                 v_servo_lift.setPosition(1);
