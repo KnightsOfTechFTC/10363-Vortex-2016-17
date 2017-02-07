@@ -439,7 +439,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                     }
                 }
                 telemetry.update();
-                double adjspeed=(1)*Math.sin(((2*Math.PI)/360)*(deg));
+                double adjspeed=(.7)*Math.sin(((2*Math.PI)/360)*(deg));
                 if (v_motor_left_drive!=null&&v_motor_right_drive!=null){
                     v_motor_left_drive.setPower(.4-adjspeed);
                     v_motor_right_drive.setPower(.4+adjspeed);
