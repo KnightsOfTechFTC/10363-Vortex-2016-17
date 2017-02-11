@@ -15,7 +15,7 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
     public void init() {
 
         RobertII.init(hardwareMap);
-        telemetry.addData("  ",1);
+        telemetry.addData(" bbhbnb ",1);
         telemetry.update();
     }
 
@@ -99,11 +99,14 @@ public class Team_10363_TeleOp_single_stick_one_controller extends OpMode {
             telemetry.addData("Tube Beacon Status: ", beacon1);
 
         }
-        if (gamepad1.right_trigger>gamepad2.right_trigger){
+        if (gamepad1.right_trigger>gamepad2.right_trigger &&gamepad1.right_trigger>.3){
             RobertII.m_ball_shooting_power(gamepad1.right_trigger);
             telemetry.addData("Ball shooting Power",gamepad1.right_trigger);
 
-        }else {
+        }else if (gamepad1.left_trigger>.3){
+            RobertII.m_ball_shooting_power(-.4f);
+        }
+        else {
             RobertII.m_ball_shooting_power(gamepad2.right_trigger);
         }
         if(gamepad1.left_bumper){

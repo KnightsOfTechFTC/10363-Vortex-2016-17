@@ -160,9 +160,9 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         }
         try{
             v_motor_ball_shooter=hardwareMap.dcMotor.get("ball_shooter");
-            v_motor_ball_shooter.setDirection(DcMotor.Direction.REVERSE);
+            v_motor_ball_shooter.setDirection(DcMotor.Direction.FORWARD);
             v_motor_ball_shooter.setPower(0);
-            v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             v_motor_ball_shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         //If it doesn't work, set the motor to null and add record the problem in the Debug log.
@@ -211,6 +211,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                 telemetry.addData("front color not inited",0);
             }
             telemetry.addData("3",3);
+            telemetry.addData("Will: Do not run unless you see this message",0);
 
             telemetry.update();
             idle();
@@ -262,7 +263,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         setDrivePower(.55f,-.55f);
         // stop turning once white line is detected or after 5 secs
         runtime.reset();
-        while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
+        while (a_ground_alpha() < 4 && opModeIsActive() && runtime.seconds() < 5) {
             telemetry.addData("-1: time driving", runtime.milliseconds());
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -276,7 +277,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         gyrohold(800,90,2.5);
         // finish drive to beacon until the color sensor sees red or blue
         runtime.reset();
-        while (runtime.milliseconds()<=1000&&FrontColor.red()<2&&FrontColor.blue()<2&& opModeIsActive()){
+        while (runtime.milliseconds()<=1000&&FrontColor.red()<3&&FrontColor.blue()<3&& opModeIsActive()){
                 setDrivePower(.2f,.6f);
         }
         // adjustments to align to the beacon
@@ -403,7 +404,6 @@ public class Team10363TempAutoBlue extends LinearOpMode {
         // turn towards the beacon until the white line is detected or 5 secs
         setDrivePower(.65f,-.65f);
         runtime.reset();
-        v_motor_ball_shooter.setPower(1);
         beacons.activate();
         boolean seeslego=false;
         while (a_ground_alpha() < 5 && opModeIsActive() && runtime.seconds() < 5) {
@@ -414,6 +414,13 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             telemetry.update();
             idle();}
         runtime.reset();
+        for (VuforiaTrackable beac:beacons){
+            if (beac.getName()=="Legos"){
+                seeslego=true;
+            }
+        }
+        int rr=0;
+        int rb=0;
         if (seeslego){
             while (opModeIsActive()&&FrontColor.blue()<2&&FrontColor.red()<2){
                 double deg=0;
@@ -454,7 +461,7 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             // adjust the angle of the robot and continue driving
             gyrohold(1000, 85, 2.5);
             runtime.reset();
-            while (runtime.milliseconds() <= 500) {
+            while (FrontColor.red()<3&&FrontColor.blue()<3&&runtime.milliseconds()<1000) {
                 setDrivePower(.4f, 1f);
             }
             setDrivePower(0, 0);
@@ -503,6 +510,9 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             right_beacon=-1;
             v_servo_left_beacon.setPower(0);
             v_servo_right_beacon.setPower(0);
+        } else {
+            rr=FrontColor.red();
+            rb=FrontColor.blue();
         }
 
 
@@ -519,10 +529,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             telemetry.addData("-1: time driving",runtime.milliseconds());
             double adjspeed=(-.3+-.3)*Math.sin(((2*Math.PI)/360)*(a_gyro_heading()-45));
             telemetry.addData("2: adjspeed: " ,adjspeed);
-            if (runtime.milliseconds()<1330||runtime.milliseconds()>1740) {
-                v_motor_left_drive.setPower(-1 + adjspeed);
-                v_motor_right_drive.setPower(-1 - adjspeed);
-            }
+            v_motor_left_drive.setPower(-1 + adjspeed);
+            v_motor_right_drive.setPower(-1 - adjspeed);
             telemetry.addData("5: Heading ", a_gyro_heading());
             telemetry.addData("6: Ground Color (Blue) ", a_ground_blue());
             telemetry.addData("7: Ground Color (Alpha) ", a_ground_alpha());
@@ -531,6 +539,8 @@ public class Team10363TempAutoBlue extends LinearOpMode {
             telemetry.addData("10: last state left ", left_encoder);
             telemetry.addData("11: last state right ", right_encoder);
             telemetry.addData("12: actual left power ", actual_left_power());
+            telemetry.addData("13: beacon red if fail",rr);
+            telemetry.addData("13: beacon blue if fail",rb);
             telemetry.update();
             if (right_beacon==1){
                 if (runtime.milliseconds()<1500) {
@@ -551,22 +561,18 @@ public class Team10363TempAutoBlue extends LinearOpMode {
                     v_servo_left_beacon.setPower(0);
                 }
             }
-            if (runtime.milliseconds()>1330&&runtime.milliseconds()<1740){
-                v_motor_left_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                v_motor_right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                v_motor_left_drive.setPower(0);
-                v_motor_right_drive.setPower(0);
+            if (runtime.milliseconds()>1730&&runtime.milliseconds()<1800){
+                v_motor_ball_shooter.setPower(1);
+            }else {
+                v_motor_ball_shooter.setPower(0);
             }
-            if (runtime.milliseconds()>1730){
-                v_servo_lift.setPosition(1);
-            }
+
             // Allow time for other processes to run.
             idle();
         }
         // stop on the vortex base
         setDrivePower(0,0);
         v_motor_ball_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        v_motor_ball_shooter.setPower(0);
 
         /*runtime.reset();
         while (a_ground_alpha() < 7 && opModeIsActive() && runtime.seconds() < 2.5) {
